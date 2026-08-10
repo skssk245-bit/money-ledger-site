@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예적금 만기 계산기 (단리·복리, 세금우대) — 머니장부</title>
+<meta name="description" content="적금·예금 만기 수령액을 단리·복리 방식과 이자소득세를 반영해 계산합니다. 세금우대와 일반과세 비교도 가능합니다.">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">財</span>머니장부</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">03 · 저축 · 투자</div>
+    <h1>예적금 만기 계산기</h1>
+    <p>매월 납입하는 적금 또는 목돈을 넣는 예금의 만기 수령액을 이자소득세(15.4%)까지 반영해 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="type">상품 종류</label>
+      <div class="input-unit">
+        <select id="type" onchange="toggleType()">
+          <option value="installment">적금 (매월 납입)</option>
+          <option value="deposit">예금 (목돈 예치)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field" id="amount-field">
+      <label id="amount-label" for="amount">매월 납입액</label>
+      <div class="input-unit">
+        <input type="text" id="amount" data-comma inputmode="numeric" placeholder="예: 500,000">
+        <span class="unit">원</span>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="rate">연 금리 (세전)</label>
+        <div class="input-unit">
+          <input type="text" id="rate" inputmode="decimal" placeholder="예: 3.5">
+          <span class="unit">%</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="period">가입 기간</label>
+        <div class="input-unit">
+          <input type="text" id="period" inputmode="numeric" placeholder="예: 12">
+          <span class="unit">개월</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="taxtype">과세 방식</label>
+      <div class="input-unit">
+        <select id="taxtype">
+          <option value="general">일반과세 (15.4%)</option>
+          <option value="preferential">세금우대(9.5%)</option>
+          <option value="none">비과세</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcSavings()">만기 수령액 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">세후 만기 수령액</div>
+    <div class="stub-amount" id="r-final">0<span class="won">원</span></div>
+    <div class="stub-sub" id="r-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">원금 합계</span><span class="v" id="r-principal"></span></div>
+      <div class="line"><span class="k">세전 이자</span><span class="v" id="r-interest"></span></div>
+      <div class="line"><span class="k">이자소득세</span><span class="v" id="r-tax"></span></div>
+      <div class="line total"><span class="k">세후 수령액</span><span class="v" id="r-total"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>적금 이자, 생각보다 적게 느껴지는 이유</h2>
+    <p>적금은 매월 납입액마다 예치 기간이 다릅니다. 첫 달 납입금은 만기까지 전 기간 이자가 붙지만, 마지막 달 납입금은 이자가 거의 붙지 않아 평균적으로 만기 기간의 절반 정도만 이자가 계산됩니다. 그래서 "연 5% 적금"이라도 실제 체감 이자는 절반 수준인 경우가 많습니다.</p>
+    <h3>이자소득세</h3>
+    <p>일반과세는 이자소득세 14%에 지방소득세 1.4%를 더해 총 15.4%가 원천징수됩니다. 세금우대 상품(농협·수협 등 조합 예탁금)은 9.5%, ISA·비과세종합저축 등은 조건에 따라 비과세가 적용됩니다.</p>
+    <div class="disclaimer">본 계산기는 단리 기준 개략 계산이며, 금융기관별 이자 계산 방식(월복리, 일할계산 등)에 따라 실제 수령액과 차이가 있을 수 있습니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="compound.html">복리 계산기</a>
+      <a href="salary.html">연봉 실수령액 계산기</a>
+      <a href="loan.html">대출 상환 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 머니장부. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function toggleType() {
+  const type = document.getElementById('type').value;
+  const label = document.getElementById('amount-label');
+  label.textContent = type === 'installment' ? '매월 납입액' : '예치 원금';
+}
+
+function calcSavings() {
+  const type = document.getElementById('type').value;
+  const amount = parseNumber(document.getElementById('amount').value);
+  const rate = parseFloat(document.getElementById('rate').value);
+  const months = parseNumber(document.getElementById('period').value);
+  const taxtype = document.getElementById('taxtype').value;
+
+  if (!amount || amount <= 0 || !rate || rate < 0 || !months || months <= 0) {
+    alert('납입액(또는 예치금), 금리, 기간을 모두 입력해 주세요.');
+    return;
+  }
+
+  let principal, interest;
+
+  if (type === 'installment') {
+    principal = amount * months;
+    // 단리 적금: n개월째 납입금은 (months - n + 1)개월간 이자 발생
+    let totalInterestMonths = 0;
+    for (let n = 1; n <= months; n++) {
+      totalInterestMonths += (months - n + 1);
+    }
+    interest = amount * (rate / 100 / 12) * totalInterestMonths;
+  } else {
+    principal = amount;
+    interest = amount * (rate / 100) * (months / 12);
+  }
+
+  let taxRate = 0;
+  if (taxtype === 'general') taxRate = 0.154;
+  else if (taxtype === 'preferential') taxRate = 0.095;
+
+  const tax = interest * taxRate;
+  const afterTaxInterest = interest - tax;
+  const finalAmount = principal + afterTaxInterest;
+
+  document.getElementById('r-final').innerHTML = formatNumber(finalAmount) + '<span class="won">원</span>';
+  document.getElementById('r-sub').textContent = (type === 'installment' ? '매월 ' + formatNumber(amount) + '원씩 ' : formatNumber(amount) + '원을 ') + months + '개월 · 연 ' + rate + '%';
+  document.getElementById('r-principal').textContent = formatNumber(principal) + '원';
+  document.getElementById('r-interest').textContent = formatNumber(interest) + '원';
+  document.getElementById('r-tax').textContent = formatNumber(tax) + '원';
+  document.getElementById('r-total').textContent = formatNumber(finalAmount) + '원';
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

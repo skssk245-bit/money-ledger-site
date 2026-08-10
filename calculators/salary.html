@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연봉 실수령액 계산기 (2026년 4대보험 요율) — 머니장부</title>
+<meta name="description" content="2026년 최신 국민연금·건강보험·고용보험 요율을 반영한 연봉 실수령액 계산기. 부양가족·자녀 수까지 입력해 월 실수령액을 바로 확인하세요.">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">財</span>머니장부</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">01 · 급여 · 소득</div>
+    <h1>연봉 실수령액 계산기</h1>
+    <p>2026년 기준 국민연금(4.75%), 건강보험(3.595%), 장기요양보험(건강보험료의 13.14%), 고용보험(0.9%)과 근로소득세 간이 산출 방식을 반영해 월 실수령액을 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="annual">연봉 (세전, 연 기준) <span class="hint">퇴직금 별도 기준</span></label>
+      <div class="input-unit">
+        <input type="text" id="annual" data-comma inputmode="numeric" placeholder="예: 45,000,000">
+        <span class="unit">원</span>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="taxfree">월 비과세액 <span class="hint">식대 등</span></label>
+        <div class="input-unit">
+          <input type="text" id="taxfree" data-comma inputmode="numeric" value="200,000">
+          <span class="unit">원</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="dependents">부양가족 수 <span class="hint">본인 포함</span></label>
+        <div class="input-unit">
+          <input type="text" id="dependents" inputmode="numeric" value="1">
+          <span class="unit">명</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="children">20세 이하 자녀 수</label>
+      <div class="input-unit">
+        <input type="text" id="children" inputmode="numeric" value="0">
+        <span class="unit">명</span>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcSalary()">실수령액 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">월 예상 실수령액</div>
+    <div class="stub-amount" id="r-monthly">0<span class="won">원</span></div>
+    <div class="stub-sub" id="r-annual"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">국민연금</span><span class="v" id="r-np"></span></div>
+      <div class="line"><span class="k">건강보험</span><span class="v" id="r-hi"></span></div>
+      <div class="line"><span class="k">장기요양보험</span><span class="v" id="r-ltc"></span></div>
+      <div class="line"><span class="k">고용보험</span><span class="v" id="r-ei"></span></div>
+      <div class="line"><span class="k">근로소득세</span><span class="v" id="r-tax"></span></div>
+      <div class="line"><span class="k">지방소득세</span><span class="v" id="r-ltax"></span></div>
+      <div class="line total"><span class="k">공제 합계</span><span class="v" id="r-total"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>연봉 실수령액은 어떻게 계산되나요</h2>
+    <p>연봉에서 4대보험료(국민연금·건강보험·장기요양보험·고용보험)와 근로소득세, 지방소득세를 뺀 금액이 실수령액입니다. 산재보험은 회사가 전액 부담하므로 근로자 급여에서는 공제되지 않습니다.</p>
+
+    <h3>2026년 4대보험 근로자 부담 요율</h3>
+    <ul>
+      <li>국민연금 4.75% (기준소득월액 41만~659만원 구간 적용, 2026년 7월 기준)</li>
+      <li>건강보험 3.595%</li>
+      <li>장기요양보험 건강보험료의 13.14%</li>
+      <li>고용보험 0.9%</li>
+    </ul>
+
+    <h3>근로소득세는 정확히 얼마인가요</h3>
+    <p>실제 원천징수세액은 국세청 근로소득 간이세액표를 기준으로 회사가 산정하며, 부양가족 구성과 전년도 신용카드 사용액 등에 따라 조금씩 달라질 수 있습니다. 이 계산기는 근로소득공제·인적공제·세액공제를 반영한 근사치이며, 실제 급여명세서와 차이가 있을 수 있습니다.</p>
+
+    <div class="disclaimer">본 계산기의 결과는 참고용 추정치이며, 실제 급여 명세서와 다를 수 있습니다. 정확한 금액은 소속 회사 또는 국세청 간이세액표를 통해 확인하세요.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="loan.html">대출 상환 계산기</a>
+      <a href="savings.html">예적금 만기 계산기</a>
+      <a href="compound.html">복리 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 머니장부. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function calcSalary() {
+  const annual = parseNumber(document.getElementById('annual').value);
+  if (!annual || annual <= 0) { alert('연봉을 입력해 주세요.'); return; }
+  const taxfreeMonthly = parseNumber(document.getElementById('taxfree').value);
+  const dependents = Math.max(parseNumber(document.getElementById('dependents').value) || 1, 1);
+  const children = Math.max(parseNumber(document.getElementById('children').value) || 0, 0);
+
+  const monthlyGross = annual / 12;
+  const insuranceBase = Math.max(monthlyGross - taxfreeMonthly, 0);
+
+  // 국민연금 (2026.7 기준 상하한액)
+  const npBase = Math.min(Math.max(insuranceBase, 410000), 6590000);
+  const np = Math.floor(npBase * 0.0475 / 10) * 10;
+
+  // 건강보험 & 장기요양
+  const hi = Math.floor(insuranceBase * 0.03595 / 10) * 10;
+  const ltc = Math.floor(hi * 0.1314 / 10) * 10;
+
+  // 고용보험
+  const ei = Math.floor(insuranceBase * 0.009 / 10) * 10;
+
+  // 근로소득세 (간이 추정)
+  const annualTaxfree = taxfreeMonthly * 12;
+  const annualSalaryForTax = Math.max(annual - annualTaxfree, 0);
+
+  function earnedIncomeDeduction(s) {
+    if (s <= 5000000) return s * 0.7;
+    if (s <= 15000000) return 3500000 + (s - 5000000) * 0.4;
+    if (s <= 45000000) return 7500000 + (s - 15000000) * 0.15;
+    if (s <= 100000000) return 12000000 + (s - 45000000) * 0.05;
+    return 14750000 + (s - 100000000) * 0.02;
+  }
+  const earnedIncome = Math.max(annualSalaryForTax - earnedIncomeDeduction(annualSalaryForTax), 0);
+
+  const personalDeduction = dependents * 1500000;
+  const insuranceAnnualDeduction = (np + hi + ltc + ei) * 12; // 4대보험 본인부담 소득공제
+  const taxBase = Math.max(earnedIncome - personalDeduction - insuranceAnnualDeduction, 0);
+
+  function progressiveTax(b) {
+    if (b <= 14000000) return b * 0.06;
+    if (b <= 50000000) return 840000 + (b - 14000000) * 0.15;
+    if (b <= 88000000) return 6240000 + (b - 50000000) * 0.24;
+    if (b <= 150000000) return 15360000 + (b - 88000000) * 0.35;
+    if (b <= 300000000) return 37060000 + (b - 150000000) * 0.38;
+    if (b <= 500000000) return 94060000 + (b - 300000000) * 0.40;
+    if (b <= 1000000000) return 174060000 + (b - 500000000) * 0.42;
+    return 384060000 + (b - 1000000000) * 0.45;
+  }
+  const calculatedTax = progressiveTax(taxBase);
+
+  // 근로소득세액공제
+  let earnedTaxCredit;
+  if (calculatedTax <= 1300000) earnedTaxCredit = calculatedTax * 0.55;
+  else earnedTaxCredit = 715000 + (calculatedTax - 1300000) * 0.30;
+  const creditCap = annualSalaryForTax > 70000000 ? 660000 : (annualSalaryForTax > 33000000 ? 740000 - Math.floor((annualSalaryForTax - 33000000) / 1000000) * 8000 : 740000);
+  earnedTaxCredit = Math.min(earnedTaxCredit, Math.max(creditCap, 500000));
+
+  // 자녀세액공제 (간이: 1명 15만, 2명 35만, 이후 1인당 30만)
+  let childCredit = 0;
+  if (children === 1) childCredit = 150000;
+  else if (children === 2) childCredit = 350000;
+  else if (children >= 3) childCredit = 350000 + (children - 2) * 300000;
+
+  const annualTax = Math.max(Math.round((calculatedTax - earnedTaxCredit - childCredit) / 10) * 10, 0);
+  const monthlyTax = Math.floor(annualTax / 12 / 10) * 10;
+  const localTax = Math.floor(monthlyTax * 0.1 / 10) * 10;
+
+  const totalDeduction = np + hi + ltc + ei + monthlyTax + localTax;
+  const netMonthly = monthlyGross - totalDeduction;
+
+  document.getElementById('r-monthly').innerHTML = formatNumber(netMonthly) + '<span class="won">원</span>';
+  document.getElementById('r-annual').textContent = '연간 실수령액 약 ' + formatNumber(netMonthly * 12) + '원 · 세전 월급 ' + formatNumber(monthlyGross) + '원';
+  document.getElementById('r-np').textContent = formatNumber(np) + '원';
+  document.getElementById('r-hi').textContent = formatNumber(hi) + '원';
+  document.getElementById('r-ltc').textContent = formatNumber(ltc) + '원';
+  document.getElementById('r-ei').textContent = formatNumber(ei) + '원';
+  document.getElementById('r-tax').textContent = formatNumber(monthlyTax) + '원';
+  document.getElementById('r-ltax').textContent = formatNumber(localTax) + '원';
+  document.getElementById('r-total').textContent = formatNumber(totalDeduction) + '원';
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>
