@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>자동차 취득세 계산기 — 계산박스</title>
+<meta name="description" content="차량가액과 차종(승용·경차·승합·화물, 영업용 여부)에 따른 자동차 취득세를 계산합니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">18 · 세금</div>
+    <h1>자동차 취득세 계산기</h1>
+    <p>차량가액(취득가액)과 차종을 입력하면 신차·중고차 구매 시 납부해야 할 취득세를 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="price">차량가액 (취득가액)</label>
+      <div class="input-unit">
+        <input type="text" id="price" data-comma inputmode="numeric" placeholder="예: 35,000,000">
+        <span class="unit">원</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="carType">차종</label>
+      <div class="input-unit">
+        <select id="carType">
+          <option value="light">경차 (배기량 1,000cc 미만)</option>
+          <option value="passenger-private">일반 승용차 (비영업용)</option>
+          <option value="passenger-business">일반 승용차 (영업용)</option>
+          <option value="truck-private">승합·화물차 (비영업용)</option>
+          <option value="truck-business">승합·화물차 (영업용)</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcCarTax()">취득세 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">예상 취득세</div>
+    <div class="stub-amount" id="r-final">0<span class="won">원</span></div>
+    <div class="stub-sub" id="r-sub"></div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>자동차 취득세율</h2>
+    <ul>
+      <li>경차 (1,000cc 미만): 4% (조건 충족 시 최대 75만원 한도로 감면 가능)</li>
+      <li>일반 승용차 · 비영업용: 7%</li>
+      <li>일반 승용차 · 영업용: 4%</li>
+      <li>승합·화물차 · 비영업용: 5%</li>
+      <li>승합·화물차 · 영업용: 4%</li>
+    </ul>
+    <h3>중고차도 취득세를 내나요</h3>
+    <p>네, 중고차를 구매해 명의를 이전할 때도 취득세가 부과됩니다. 과세표준은 실제 거래가액과 시가표준액 중 높은 금액을 기준으로 하는 경우가 많습니다.</p>
+    <div class="disclaimer">경차 감면, 전기차·수소차 감면(한시적 제도), 다자녀·장애인 감면 등은 반영하지 않은 기본 세율 기준 계산입니다. 실제 납부액은 지자체 및 감면 요건에 따라 달라질 수 있으니 위택스에서 정확한 금액을 확인하세요.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="acquisition-tax.html">주택 취득세 계산기</a>
+      <a href="vat.html">부가세 계산기</a>
+      <a href="loan.html">대출 상환 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+const rates = {
+  'light': { rate: 0.04, label: '경차 4%' },
+  'passenger-private': { rate: 0.07, label: '일반 승용차(비영업용) 7%' },
+  'passenger-business': { rate: 0.04, label: '일반 승용차(영업용) 4%' },
+  'truck-private': { rate: 0.05, label: '승합·화물차(비영업용) 5%' },
+  'truck-business': { rate: 0.04, label: '승합·화물차(영업용) 4%' },
+};
+
+function calcCarTax() {
+  const price = parseNumber(document.getElementById('price').value);
+  const carType = document.getElementById('carType').value;
+
+  if (!price) { alert('차량가액을 입력해 주세요.'); return; }
+
+  const info = rates[carType];
+  const tax = price * info.rate;
+
+  document.getElementById('r-final').innerHTML = formatNumber(tax) + '<span class="won">원</span>';
+  document.getElementById('r-sub').textContent = info.label + ' 적용 · 감면 미반영 기본 세율';
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

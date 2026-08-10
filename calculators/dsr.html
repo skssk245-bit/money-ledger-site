@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DTI·DSR 계산기 (대출 한도 확인) — 계산박스</title>
+<meta name="description" content="연소득과 대출 상환액을 입력해 DTI(총부채상환비율)와 DSR(총부채원리금상환비율)을 계산합니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">17 · 대출</div>
+    <h1>DTI·DSR 계산기</h1>
+    <p>연소득과 대출 상환액을 입력해 대출 한도 심사에 쓰이는 DTI(총부채상환비율)와 DSR(총부채원리금상환비율)을 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="income">연소득 <span class="hint">세전</span></label>
+      <div class="input-unit">
+        <input type="text" id="income" data-comma inputmode="numeric" placeholder="예: 60,000,000">
+        <span class="unit">원</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="mortgagePayment">주택담보대출 월 원리금상환액</label>
+      <div class="input-unit">
+        <input type="text" id="mortgagePayment" data-comma inputmode="numeric" placeholder="예: 1,200,000">
+        <span class="unit">원</span>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="otherPrincipal">기타대출 월 원리금상환액 <span class="hint">DSR용</span></label>
+        <div class="input-unit">
+          <input type="text" id="otherPrincipal" data-comma inputmode="numeric" value="0">
+          <span class="unit">원</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="otherInterest">기타대출 월 이자상환액 <span class="hint">DTI용</span></label>
+        <div class="input-unit">
+          <input type="text" id="otherInterest" data-comma inputmode="numeric" value="0">
+          <span class="unit">원</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcRatio()">DTI·DSR 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">DSR (총부채원리금상환비율)</div>
+    <div class="stub-amount" id="r-dsr">0<span class="won">%</span></div>
+    <div class="stub-sub" id="r-dsr-status"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">DTI (총부채상환비율)</span><span class="v" id="r-dti"></span></div>
+      <div class="line"><span class="k">연간 총 상환액 (DSR 기준)</span><span class="v" id="r-annual-dsr"></span></div>
+      <div class="line"><span class="k">연간 총 상환액 (DTI 기준)</span><span class="v" id="r-annual-dti"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>DTI와 DSR, 무엇이 다른가요</h2>
+    <p>DTI(총부채상환비율)는 주택담보대출 원리금과 기타 대출의 '이자'만 반영합니다. 반면 DSR(총부채원리금상환비율)은 모든 대출의 원리금(원금+이자)을 전부 반영해 더 엄격한 기준입니다. 현재 금융권 대출 심사에서는 DSR이 주로 사용됩니다.</p>
+    <h3>계산식</h3>
+    <p>DTI = (주택담보대출 연간 원리금 + 기타대출 연간 이자) ÷ 연소득 × 100<br>DSR = (주택담보대출 연간 원리금 + 기타대출 연간 원리금) ÷ 연소득 × 100</p>
+    <div class="disclaimer">DSR 규제 비율은 대출 종류, 금융기관, 시점에 따라 다르게 적용됩니다(통상 은행권 40%, 비은행권 50% 내외). 정확한 대출 한도는 금융기관 상담을 통해 확인하세요.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="loan.html">대출 상환 계산기</a>
+      <a href="jeonse.html">전세/월세 전환 계산기</a>
+      <a href="salary.html">연봉 실수령액 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function calcRatio() {
+  const income = parseNumber(document.getElementById('income').value);
+  const mortgagePayment = parseNumber(document.getElementById('mortgagePayment').value);
+  const otherPrincipal = parseNumber(document.getElementById('otherPrincipal').value);
+  const otherInterest = parseNumber(document.getElementById('otherInterest').value);
+
+  if (!income || !mortgagePayment) { alert('연소득과 주택담보대출 월 상환액을 입력해 주세요.'); return; }
+
+  const annualDsr = (mortgagePayment + otherPrincipal) * 12;
+  const annualDti = (mortgagePayment + otherInterest) * 12;
+
+  const dsr = (annualDsr / income) * 100;
+  const dti = (annualDti / income) * 100;
+
+  let status;
+  if (dsr <= 40) status = '은행권 일반 기준(40%) 이내';
+  else if (dsr <= 50) status = '비은행권 기준(50%) 이내, 은행권은 초과';
+  else status = '대부분의 금융권 기준 초과';
+
+  document.getElementById('r-dsr').innerHTML = dsr.toFixed(1) + '<span class="won">%</span>';
+  document.getElementById('r-dsr-status').textContent = status;
+  document.getElementById('r-dti').textContent = dti.toFixed(1) + '%';
+  document.getElementById('r-annual-dsr').textContent = formatNumber(annualDsr) + '원';
+  document.getElementById('r-annual-dti').textContent = formatNumber(annualDti) + '원';
+
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>출산예정일 계산기 (임신 주수 계산) — 계산박스</title>
+<meta name="description" content="마지막 생리 시작일을 입력해 출산예정일과 현재 임신 주수, 분기(삼분기)를 계산합니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">16 · 건강</div>
+    <h1>출산예정일 계산기</h1>
+    <p>마지막 생리 시작일(LMP)을 기준으로 네겔 법칙에 따라 출산예정일과 오늘 기준 임신 주수를 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="lmp">마지막 생리 시작일</label>
+      <div class="input-unit">
+        <input type="date" id="lmp">
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcDueDate()">출산예정일 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">출산예정일</div>
+    <div class="stub-amount" id="r-final">-</div>
+    <div class="stub-sub" id="r-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">오늘 기준 임신 주수</span><span class="v" id="r-week"></span></div>
+      <div class="line"><span class="k">현재 분기</span><span class="v" id="r-trimester"></span></div>
+      <div class="line"><span class="k">D-day</span><span class="v" id="r-dday"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>출산예정일은 어떻게 계산하나요</h2>
+    <p>가장 널리 쓰이는 네겔 법칙(Naegele's Rule)은 마지막 생리 시작일에서 280일(40주)을 더해 출산예정일을 추정합니다. 배란과 수정이 생리 시작일로부터 약 2주 후 일어난다는 가정에 기반합니다.</p>
+    <h3>임신 분기(삼분기) 구분</h3>
+    <ul>
+      <li>1분기: 0주 ~ 13주 6일</li>
+      <li>2분기: 14주 0일 ~ 27주 6일</li>
+      <li>3분기: 28주 0일 ~ 출산</li>
+    </ul>
+    <div class="disclaimer">이 계산기는 평균적인 생리 주기(28일)를 가정한 추정치입니다. 실제 출산예정일은 초음파 검사 등을 통해 산부인과에서 확인한 날짜를 따르는 것이 정확합니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="age.html">만 나이 계산기</a>
+      <a href="date-diff.html">날짜 차이 계산기</a>
+      <a href="bmi.html">BMI 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function calcDueDate() {
+  const val = document.getElementById('lmp').value;
+  if (!val) { alert('마지막 생리 시작일을 입력해 주세요.'); return; }
+
+  const lmp = new Date(val + 'T00:00:00');
+  const due = new Date(lmp);
+  due.setDate(due.getDate() + 280);
+
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const daysPregnant = Math.floor((today - lmp) / (1000 * 60 * 60 * 24));
+  const weeks = Math.floor(daysPregnant / 7);
+  const days = daysPregnant % 7;
+
+  let trimester;
+  if (weeks < 14) trimester = '1분기';
+  else if (weeks < 28) trimester = '2분기';
+  else trimester = '3분기';
+
+  const diffToDue = Math.round((due - today) / (1000 * 60 * 60 * 24));
+  const ddayText = diffToDue >= 0 ? 'D-' + diffToDue : 'D+' + Math.abs(diffToDue);
+
+  document.getElementById('r-final').textContent = due.getFullYear() + '년 ' + (due.getMonth()+1) + '월 ' + due.getDate() + '일';
+  document.getElementById('r-sub').textContent = '네겔 법칙(LMP + 280일) 기준 추정';
+
+  if (daysPregnant < 0) {
+    document.getElementById('r-week').textContent = '-';
+    document.getElementById('r-trimester').textContent = '아직 시작 전';
+  } else {
+    document.getElementById('r-week').textContent = weeks + '주 ' + days + '일';
+    document.getElementById('r-trimester').textContent = trimester;
+  }
+  document.getElementById('r-dday').textContent = ddayText;
+
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>
