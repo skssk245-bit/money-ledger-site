@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D-day 계산기 — 계산박스</title>
+<meta name="description" content="기념일이나 목표일까지 남은 날짜, 혹은 지난 날짜를 D-day 형식으로 계산합니다.">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">09 · 날짜 · 시간</div>
+    <h1>D-day 계산기</h1>
+    <p>기념일, 시험일, 마감일 등 특정 날짜까지 남은 일수 또는 지난 일수를 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="target">기준 날짜</label>
+      <div class="input-unit">
+        <input type="date" id="target">
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcDday()">D-day 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label" id="r-label">오늘은</div>
+    <div class="stub-amount" id="r-final">D-0</div>
+    <div class="stub-sub" id="r-sub"></div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>D-day 표기법</h2>
+    <p>목표일이 아직 남았다면 'D-N'(N일 전), 오늘이라면 'D-day', 이미 지났다면 'D+N'(N일 후)로 표기합니다. 시험 준비, 결혼기념일, 프로젝트 마감 등 목표를 카운트다운할 때 흔히 사용됩니다.</p>
+    <div class="disclaimer">계산은 날짜(자정 기준) 단위로 이루어지며, 시간대나 시각까지는 반영하지 않습니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="date-diff.html">날짜 차이 계산기</a>
+      <a href="age.html">만 나이 계산기</a>
+      <a href="compound.html">복리 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function calcDday() {
+  const val = document.getElementById('target').value;
+  if (!val) { alert('날짜를 선택해 주세요.'); return; }
+  const target = new Date(val + 'T00:00:00');
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const diffDays = Math.round((target - today) / (1000 * 60 * 60 * 24));
+  let ddayText, label;
+  if (diffDays === 0) { ddayText = 'D-day'; label = '바로 오늘입니다'; }
+  else if (diffDays > 0) { ddayText = 'D-' + diffDays; label = diffDays + '일 남았습니다'; }
+  else { ddayText = 'D+' + Math.abs(diffDays); label = Math.abs(diffDays) + '일 지났습니다'; }
+
+  document.getElementById('r-label').textContent = target.toLocaleDateString('ko-KR') + ' 기준';
+  document.getElementById('r-final').textContent = ddayText;
+  document.getElementById('r-sub').textContent = label;
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

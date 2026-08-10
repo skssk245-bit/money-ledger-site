@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퇴직금 계산기 (평균임금 기준) — 계산박스</title>
+<meta name="description" content="입사일, 퇴사일과 최근 3개월 급여를 입력해 평균임금 기준 예상 퇴직금을 계산합니다.">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">05 · 저축 · 투자</div>
+    <h1>퇴직금 계산기</h1>
+    <p>퇴직 전 3개월간 받은 임금을 기준으로 1일 평균임금을 산출하고, 근속일수에 비례한 법정 퇴직금을 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field-row">
+      <div class="field">
+        <label for="start">입사일</label>
+        <div class="input-unit">
+          <input type="date" id="start">
+        </div>
+      </div>
+      <div class="field">
+        <label for="end">퇴사일</label>
+        <div class="input-unit">
+          <input type="date" id="end">
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="wage3m">최근 3개월간 받은 임금 총액 <span class="hint">세전, 기본급+수당 포함</span></label>
+      <div class="input-unit">
+        <input type="text" id="wage3m" data-comma inputmode="numeric" placeholder="예: 12,000,000">
+        <span class="unit">원</span>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="bonus">최근 1년 상여금 총액 <span class="hint">해당 없으면 0</span></label>
+        <div class="input-unit">
+          <input type="text" id="bonus" data-comma inputmode="numeric" value="0">
+          <span class="unit">원</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="leave">최근 1년 연차수당 총액 <span class="hint">해당 없으면 0</span></label>
+        <div class="input-unit">
+          <input type="text" id="leave" data-comma inputmode="numeric" value="0">
+          <span class="unit">원</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcSeverance()">퇴직금 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">예상 퇴직금</div>
+    <div class="stub-amount" id="r-final">0<span class="won">원</span></div>
+    <div class="stub-sub" id="r-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">근속일수</span><span class="v" id="r-days"></span></div>
+      <div class="line"><span class="k">1일 평균임금</span><span class="v" id="r-avgwage"></span></div>
+      <div class="line total"><span class="k">퇴직금</span><span class="v" id="r-total"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>퇴직금은 어떻게 계산되나요</h2>
+    <p>퇴직금은 「1일 평균임금 × 30일 × (재직일수 ÷ 365)」로 계산합니다. 1일 평균임금은 퇴직 직전 3개월간 받은 임금 총액에 연간 상여금과 연차수당의 3개월분을 더한 뒤 90일로 나누어 구합니다.</p>
+    <h3>퇴직금 지급 대상</h3>
+    <p>계속근로기간이 1년 이상이고 4주간 평균하여 1주간 소정근로시간이 15시간 이상인 근로자는 퇴직금 지급 대상입니다.</p>
+    <div class="disclaimer">본 계산기는 법정 최저 기준에 따른 개략적 추정치이며, 회사의 퇴직금 규정(누진제 등)이나 실제 임금 항목에 따라 결과가 달라질 수 있습니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="salary.html">연봉 실수령액 계산기</a>
+      <a href="jeonse.html">전세/월세 전환 계산기</a>
+      <a href="date-diff.html">날짜 차이 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+document.getElementById('end').valueAsDate = new Date();
+
+function calcSeverance() {
+  const start = new Date(document.getElementById('start').value);
+  const end = new Date(document.getElementById('end').value);
+  const wage3m = parseNumber(document.getElementById('wage3m').value);
+  const bonus = parseNumber(document.getElementById('bonus').value);
+  const leave = parseNumber(document.getElementById('leave').value);
+
+  if (!document.getElementById('start').value || !document.getElementById('end').value || !wage3m) {
+    alert('입사일, 퇴사일, 최근 3개월 임금 총액을 입력해 주세요.');
+    return;
+  }
+  const days = Math.round((end - start) / (1000 * 60 * 60 * 24));
+  if (days <= 0) { alert('퇴사일이 입사일보다 빨라요.'); return; }
+
+  const totalFor90 = wage3m + (bonus * 3 / 12) + (leave * 3 / 12);
+  const avgDailyWage = totalFor90 / 90;
+  const severance = avgDailyWage * 30 * (days / 365);
+
+  document.getElementById('r-final').innerHTML = formatNumber(severance) + '<span class="won">원</span>';
+  document.getElementById('r-sub').textContent = '근속 ' + days + '일 기준 예상 퇴직금';
+  document.getElementById('r-days').textContent = days + '일';
+  document.getElementById('r-avgwage').textContent = formatNumber(avgDailyWage) + '원';
+  document.getElementById('r-total').textContent = formatNumber(severance) + '원';
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

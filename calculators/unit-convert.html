@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>단위 변환기 (길이·무게·온도·부피) — 계산박스</title>
+<meta name="description" content="길이, 무게, 온도, 부피 단위를 한 번에 변환하는 단위 변환기입니다.">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">13 · 단위 변환</div>
+    <h1>단위 변환기</h1>
+    <p>길이, 무게, 온도, 부피 단위를 카테고리별로 골라 바로 변환합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="category">변환 종류</label>
+      <div class="input-unit">
+        <select id="category" onchange="renderUnits()">
+          <option value="length">길이</option>
+          <option value="weight">무게</option>
+          <option value="temp">온도</option>
+          <option value="volume">부피</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="fromValue">값</label>
+        <div class="input-unit">
+          <input type="text" id="fromValue" inputmode="decimal" placeholder="예: 100">
+        </div>
+      </div>
+      <div class="field">
+        <label for="fromUnit">단위</label>
+        <div class="input-unit">
+          <select id="fromUnit"></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="toUnit">변환할 단위</label>
+      <div class="input-unit">
+        <select id="toUnit"></select>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcConvert()">변환하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">변환 결과</div>
+    <div class="stub-amount" id="r-final">0</div>
+    <div class="stub-sub" id="r-sub"></div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>자주 쓰는 단위 환산</h2>
+    <p>해외 직구, 요리 레시피, 여행지 온도 확인, 운동 기록 등 다양한 상황에서 필요한 길이·무게·온도·부피 단위를 한 번에 변환할 수 있습니다.</p>
+    <div class="disclaimer">계산 결과는 표준 환산 계수를 기준으로 하며, 소수점 이하는 반올림되어 표시됩니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="bmi.html">BMI 계산기</a>
+      <a href="calorie.html">칼로리 계산기</a>
+      <a href="date-diff.html">날짜 차이 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+const units = {
+  length: { label: '길이', base: 'm', factors: { m: 1, cm: 0.01, km: 1000, mile: 1609.344, ft: 0.3048, inch: 0.0254 }, names: { m:'미터(m)', cm:'센티미터(cm)', km:'킬로미터(km)', mile:'마일(mile)', ft:'피트(ft)', inch:'인치(inch)' } },
+  weight: { label: '무게', base: 'kg', factors: { kg: 1, g: 0.001, lb: 0.453592, oz: 0.0283495 }, names: { kg:'킬로그램(kg)', g:'그램(g)', lb:'파운드(lb)', oz:'온스(oz)' } },
+  volume: { label: '부피', base: 'L', factors: { L: 1, mL: 0.001, gal: 3.78541, cup: 0.236588 }, names: { L:'리터(L)', mL:'밀리리터(mL)', gal:'갤런(gal)', cup:'컵(cup)' } },
+  temp: { label: '온도', special: true, names: { C:'섭씨(°C)', F:'화씨(°F)', K:'켈빈(K)' } }
+};
+
+function renderUnits() {
+  const cat = document.getElementById('category').value;
+  const def = units[cat];
+  const names = def.names;
+  const fromSel = document.getElementById('fromUnit');
+  const toSel = document.getElementById('toUnit');
+  fromSel.innerHTML = '';
+  toSel.innerHTML = '';
+  Object.keys(names).forEach((key, i) => {
+    const opt1 = document.createElement('option');
+    opt1.value = key; opt1.textContent = names[key];
+    fromSel.appendChild(opt1);
+    const opt2 = document.createElement('option');
+    opt2.value = key; opt2.textContent = names[key];
+    if (i === 1) opt2.selected = true;
+    toSel.appendChild(opt2);
+  });
+}
+renderUnits();
+
+function convertTemp(value, from, to) {
+  let celsius;
+  if (from === 'C') celsius = value;
+  else if (from === 'F') celsius = (value - 32) * 5 / 9;
+  else celsius = value - 273.15;
+
+  if (to === 'C') return celsius;
+  if (to === 'F') return celsius * 9 / 5 + 32;
+  return celsius + 273.15;
+}
+
+function calcConvert() {
+  const cat = document.getElementById('category').value;
+  const value = parseFloat(document.getElementById('fromValue').value);
+  const from = document.getElementById('fromUnit').value;
+  const to = document.getElementById('toUnit').value;
+
+  if (isNaN(value)) { alert('변환할 값을 입력해 주세요.'); return; }
+
+  let result;
+  if (cat === 'temp') {
+    result = convertTemp(value, from, to);
+  } else {
+    const def = units[cat];
+    const baseValue = value * def.factors[from];
+    result = baseValue / def.factors[to];
+  }
+
+  const rounded = Math.round(result * 1000) / 1000;
+  document.getElementById('r-final').textContent = rounded.toLocaleString('ko-KR');
+  document.getElementById('r-sub').textContent = value + ' ' + units[cat].names[from] + ' = ' + rounded + ' ' + units[cat].names[to];
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

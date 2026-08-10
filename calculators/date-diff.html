@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>날짜 차이 계산기 — 계산박스</title>
+<meta name="description" content="두 날짜 사이의 총 일수, 주수, 개월수, 연수를 계산합니다.">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">10 · 날짜 · 시간</div>
+    <h1>날짜 차이 계산기</h1>
+    <p>두 날짜를 입력하면 그 사이의 총 일수와 함께 주·개월·연 단위 환산값을 보여줍니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field-row">
+      <div class="field">
+        <label for="date1">시작 날짜</label>
+        <div class="input-unit">
+          <input type="date" id="date1">
+        </div>
+      </div>
+      <div class="field">
+        <label for="date2">종료 날짜</label>
+        <div class="input-unit">
+          <input type="date" id="date2">
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcDiff()">날짜 차이 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">두 날짜 사이</div>
+    <div class="stub-amount" id="r-final">0<span class="won">일</span></div>
+    <div class="stub-sub" id="r-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">주 단위</span><span class="v" id="r-weeks"></span></div>
+      <div class="line"><span class="k">개월 단위(약)</span><span class="v" id="r-months"></span></div>
+      <div class="line"><span class="k">연 단위(약)</span><span class="v" id="r-years"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>이럴 때 유용해요</h2>
+    <ul>
+      <li>계약 기간, 프로젝트 진행 기간 등 두 날짜 사이 실제 일수 확인</li>
+      <li>연애 기간, 결혼 기념일 등 특별한 날 세기</li>
+      <li>입원·휴직 등 특정 기간의 총 일수 산정</li>
+    </ul>
+    <div class="disclaimer">개월·연 단위는 30일/365일 기준의 근사치이며, 실제 달력상의 개월수와 하루 이틀 차이가 날 수 있습니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="dday.html">D-day 계산기</a>
+      <a href="age.html">만 나이 계산기</a>
+      <a href="severance.html">퇴직금 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function calcDiff() {
+  const v1 = document.getElementById('date1').value;
+  const v2 = document.getElementById('date2').value;
+  if (!v1 || !v2) { alert('두 날짜를 모두 입력해 주세요.'); return; }
+
+  const d1 = new Date(v1);
+  const d2 = new Date(v2);
+  const diffDays = Math.abs(Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+
+  document.getElementById('r-final').innerHTML = formatNumber(diffDays) + '<span class="won">일</span>';
+  document.getElementById('r-sub').textContent = v1 + ' ~ ' + v2;
+  document.getElementById('r-weeks').textContent = (diffDays / 7).toFixed(1) + '주';
+  document.getElementById('r-months').textContent = (diffDays / 30).toFixed(1) + '개월';
+  document.getElementById('r-years').textContent = (diffDays / 365).toFixed(2) + '년';
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

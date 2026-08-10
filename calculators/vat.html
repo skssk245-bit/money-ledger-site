@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부가세 계산기 (공급가액·부가세 분리) — 계산박스</title>
+<meta name="description" content="공급가액에 부가세 10%를 더하거나, 부가세 포함 금액에서 공급가액과 부가세를 분리해 계산합니다.">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">15 · 세금</div>
+    <h1>부가세 계산기</h1>
+    <p>공급가액 기준으로 부가세(10%)를 더한 총액을 구하거나, 부가세 포함 금액에서 공급가액과 부가세를 역산해 분리합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="mode">계산 방식</label>
+      <div class="input-unit">
+        <select id="mode" onchange="toggleMode()">
+          <option value="supply-to-total">공급가액 → 부가세 포함 총액</option>
+          <option value="total-to-supply">부가세 포함 총액 → 공급가액 분리</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label id="amount-label" for="amount">공급가액</label>
+      <div class="input-unit">
+        <input type="text" id="amount" data-comma inputmode="numeric" placeholder="예: 1,000,000">
+        <span class="unit">원</span>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcVat()">계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label" id="r-label">부가세 포함 총액</div>
+    <div class="stub-amount" id="r-final">0<span class="won">원</span></div>
+    <div class="stub-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">공급가액</span><span class="v" id="r-supply"></span></div>
+      <div class="line"><span class="k">부가세 (10%)</span><span class="v" id="r-vat"></span></div>
+      <div class="line total"><span class="k">합계</span><span class="v" id="r-total"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>부가가치세(VAT), 어떻게 계산하나요</h2>
+    <p>우리나라 부가가치세율은 10%입니다. 세금계산서나 영수증에 표시된 '공급가액'은 물건·서비스 자체의 가격이고, 여기에 10%를 더한 것이 '공급대가(부가세 포함 총액)'입니다.</p>
+    <h3>계산식</h3>
+    <p>부가세 포함 총액 = 공급가액 × 1.1<br>공급가액 = 부가세 포함 총액 ÷ 1.1 (부가세 = 총액 − 공급가액)</p>
+    <div class="disclaimer">간이과세자, 면세 대상 품목 등은 별도의 세율·계산 방식이 적용될 수 있습니다. 정확한 세금계산서 발행은 세무 전문가와 상담하세요.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="withholding.html">3.3% 원천징수세 계산기</a>
+      <a href="salary.html">연봉 실수령액 계산기</a>
+      <a href="acquisition-tax.html">취득세 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function toggleMode() {
+  const mode = document.getElementById('mode').value;
+  document.getElementById('amount-label').textContent = mode === 'supply-to-total' ? '공급가액' : '부가세 포함 총액';
+}
+
+function calcVat() {
+  const mode = document.getElementById('mode').value;
+  const amount = parseNumber(document.getElementById('amount').value);
+  if (!amount) { alert('금액을 입력해 주세요.'); return; }
+
+  let supply, vat, total;
+  if (mode === 'supply-to-total') {
+    supply = amount;
+    vat = supply * 0.1;
+    total = supply + vat;
+    document.getElementById('r-label').textContent = '부가세 포함 총액';
+  } else {
+    total = amount;
+    supply = total / 1.1;
+    vat = total - supply;
+    document.getElementById('r-label').textContent = '공급가액';
+  }
+
+  const mainValue = mode === 'supply-to-total' ? total : supply;
+  document.getElementById('r-final').innerHTML = formatNumber(mainValue) + '<span class="won">원</span>';
+  document.getElementById('r-supply').textContent = formatNumber(supply) + '원';
+  document.getElementById('r-vat').textContent = formatNumber(vat) + '원';
+  document.getElementById('r-total').textContent = formatNumber(total) + '원';
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>
