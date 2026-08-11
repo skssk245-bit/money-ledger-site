@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>양도소득세 계산기 (부동산) — 계산박스</title>
+<meta name="description" content="취득가액, 양도가액, 보유기간을 입력해 부동산 양도소득세를 계산합니다. 1세대1주택 비과세, 장기보유특별공제를 반영합니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="logo-mark"><svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="8" fill="#1F6F54"/><rect x="7" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="17" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="7" y="17" width="16" height="6" rx="1.5" fill="white"/></svg></span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">19 · 세금</div>
+    <h1>양도소득세 계산기</h1>
+    <p>취득가액, 양도가액, 보유기간을 입력해 부동산 매도 시 예상 양도소득세를 계산합니다. 1세대1주택 비과세와 장기보유특별공제를 반영합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="houseType">주택 유형</label>
+      <div class="input-unit">
+        <select id="houseType">
+          <option value="one-house">1세대 1주택 (2년 이상 보유·거주 등 비과세 요건 충족)</option>
+          <option value="general">다주택 또는 기타 (비과세 요건 미충족)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="acquirePrice">취득가액</label>
+        <div class="input-unit">
+          <input type="text" id="acquirePrice" data-comma inputmode="numeric" placeholder="예: 500,000,000">
+          <span class="unit">원</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="sellPrice">양도가액</label>
+        <div class="input-unit">
+          <input type="text" id="sellPrice" data-comma inputmode="numeric" placeholder="예: 900,000,000">
+          <span class="unit">원</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="expenses">필요경비 <span class="hint">취득세·중개수수료·리모델링 등</span></label>
+        <div class="input-unit">
+          <input type="text" id="expenses" data-comma inputmode="numeric" value="0">
+          <span class="unit">원</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="holdYears">보유기간</label>
+        <div class="input-unit">
+          <input type="text" id="holdYears" inputmode="numeric" placeholder="예: 7">
+          <span class="unit">년</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcCapitalGainsTax()">양도소득세 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">예상 양도소득세 (지방소득세 포함)</div>
+    <div class="stub-amount" id="r-final">0<span class="won">원</span></div>
+    <div class="stub-sub" id="r-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">양도차익</span><span class="v" id="r-gain"></span></div>
+      <div class="line"><span class="k">장기보유특별공제</span><span class="v" id="r-deduction"></span></div>
+      <div class="line"><span class="k">과세표준</span><span class="v" id="r-base"></span></div>
+      <div class="line"><span class="k">양도소득세</span><span class="v" id="r-tax"></span></div>
+      <div class="line"><span class="k">지방소득세</span><span class="v" id="r-localtax"></span></div>
+      <div class="line total"><span class="k">총 납부세액</span><span class="v" id="r-total"></span></div>
+    </div>
+    <button class="btn-share" onclick="shareResult('양도소득세 계산기', 'result')">📤 결과 공유하기 (카카오톡·문자 등)</button>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>양도소득세, 어떻게 계산되나요</h2>
+    <p>양도차익(양도가액 − 취득가액 − 필요경비)에서 보유기간에 따른 장기보유특별공제와 기본공제(연 250만원)를 뺀 금액이 과세표준입니다. 여기에 종합소득세와 동일한 누진세율(6~45%)을 적용하고, 그 세액의 10%를 지방소득세로 추가 납부합니다.</p>
+
+    <h3>1세대 1주택 비과세</h3>
+    <p>2년 이상 보유(조정대상지역은 거주 요건 추가)한 1세대 1주택은 양도가액 12억원까지 비과세입니다. 12억원을 초과하는 경우, 초과분에 해당하는 차익에만 과세하며 보유·거주기간에 따라 최대 80%의 장기보유특별공제를 받을 수 있습니다.</p>
+
+    <h3>다주택자 · 기타의 경우</h3>
+    <p>1세대 1주택 비과세 요건을 충족하지 못하면 전체 양도차익에 대해 과세되며, 장기보유특별공제는 보유기간 1년당 2%씩 최대 30%(15년 이상)까지만 적용됩니다.</p>
+
+    <div class="disclaimer">이 계산기는 단순화된 추정치이며, 조정대상지역 다주택 중과세(현재 한시적 유예 중), 상속·증여 취득분, 일시적 2주택 특례, 분양권·입주권 등 다양한 예외 상황은 반영하지 않았습니다. 실제 신고 세액은 국세청 홈택스 모의계산 또는 세무 전문가 상담을 통해 확인하세요.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="acquisition-tax.html">주택 취득세 계산기</a>
+      <a href="brokerage-fee.html">중개보수 계산기</a>
+      <a href="jeonse.html">전세/월세 전환 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function progressiveTax(b) {
+  if (b <= 14000000) return b * 0.06;
+  if (b <= 50000000) return 840000 + (b - 14000000) * 0.15;
+  if (b <= 88000000) return 6240000 + (b - 50000000) * 0.24;
+  if (b <= 150000000) return 15360000 + (b - 88000000) * 0.35;
+  if (b <= 300000000) return 37060000 + (b - 150000000) * 0.38;
+  if (b <= 500000000) return 94060000 + (b - 300000000) * 0.40;
+  if (b <= 1000000000) return 174060000 + (b - 500000000) * 0.42;
+  return 384060000 + (b - 1000000000) * 0.45;
+}
+
+function calcCapitalGainsTax() {
+  const houseType = document.getElementById('houseType').value;
+  const acquirePrice = parseNumber(document.getElementById('acquirePrice').value);
+  const sellPrice = parseNumber(document.getElementById('sellPrice').value);
+  const expenses = parseNumber(document.getElementById('expenses').value);
+  const holdYears = parseNumber(document.getElementById('holdYears').value);
+
+  if (!acquirePrice || !sellPrice || !holdYears) {
+    alert('취득가액, 양도가액, 보유기간을 입력해 주세요.');
+    return;
+  }
+
+  const gain = Math.max(sellPrice - acquirePrice - expenses, 0);
+  let taxableGain, deductionRate, sub;
+
+  if (houseType === 'one-house') {
+    if (sellPrice <= 1200000000) {
+      document.getElementById('r-final').innerHTML = '0<span class="won">원</span>';
+      document.getElementById('r-sub').textContent = '1세대 1주택 비과세 (양도가액 12억원 이하)';
+      document.getElementById('r-gain').textContent = formatNumber(gain) + '원';
+      document.getElementById('r-deduction').textContent = '해당 없음 (전액 비과세)';
+      document.getElementById('r-base').textContent = '0원';
+      document.getElementById('r-tax').textContent = '0원';
+      document.getElementById('r-localtax').textContent = '0원';
+      document.getElementById('r-total').textContent = '0원';
+      document.getElementById('result').classList.add('show');
+      document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+    taxableGain = gain * ((sellPrice - 1200000000) / sellPrice);
+    deductionRate = Math.min(0.8, holdYears * 0.08);
+    sub = '1세대 1주택 · 12억원 초과분 과세 · 장기보유특별공제 ' + (deductionRate * 100).toFixed(0) + '%';
+  } else {
+    taxableGain = gain;
+    deductionRate = Math.min(0.3, holdYears * 0.02);
+    sub = '다주택/기타 · 장기보유특별공제 ' + (deductionRate * 100).toFixed(0) + '%';
+  }
+
+  const deductionAmount = taxableGain * deductionRate;
+  const afterDeduction = taxableGain - deductionAmount;
+  const basicDeduction = 2500000;
+  const taxBase = Math.max(afterDeduction - basicDeduction, 0);
+  const tax = progressiveTax(taxBase);
+  const localTax = tax * 0.1;
+  const total = tax + localTax;
+
+  document.getElementById('r-final').innerHTML = formatNumber(total) + '<span class="won">원</span>';
+  document.getElementById('r-sub').textContent = sub;
+  document.getElementById('r-gain').textContent = formatNumber(gain) + '원';
+  document.getElementById('r-deduction').textContent = formatNumber(deductionAmount) + '원';
+  document.getElementById('r-base').textContent = formatNumber(taxBase) + '원';
+  document.getElementById('r-tax').textContent = formatNumber(tax) + '원';
+  document.getElementById('r-localtax').textContent = formatNumber(localTax) + '원';
+  document.getElementById('r-total').textContent = formatNumber(total) + '원';
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>
