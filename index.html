@@ -78,6 +78,21 @@
       <div class="eyebrow">CALC BOX · 생활 속 모든 계산</div>
       <h1>대출부터 만 나이까지.<br>누구나 한번쯤 해보는 계산.</h1>
       <p>재테크, 날짜, 건강, 단위변환까지 — 자주 찾는 계산기를 장부 정리하듯 한 곳에 모았습니다.<br>회원가입 없이 결과부터 바로 확인하세요.</p>
+
+      <div class="search-bar-mobile">
+        <input type="text" id="calc-search-m" placeholder="계산기 검색 (예: 대출, BMI, 만 나이)" autocomplete="off">
+        <div class="search-results" id="search-results-m"></div>
+      </div>
+
+      <div class="popular-chips">
+        <span class="chips-label">많이 찾는 계산기</span>
+        <div class="chips-row">
+          <a href="calculators/age.html">만 나이</a>
+          <a href="calculators/loan.html">대출 상환</a>
+          <a href="calculators/bmi.html">BMI</a>
+          <a href="calculators/salary.html">연봉 실수령액</a>
+        </div>
+      </div>
     </section>
   </div>
 
@@ -485,31 +500,40 @@ const calcList = [
 const searchInput = document.getElementById('calc-search');
 const searchResults = document.getElementById('search-results');
 
-if (searchInput) {
-  searchInput.addEventListener('input', () => {
-    const q = searchInput.value.trim();
-    if (!q) { searchResults.classList.remove('show'); return; }
+function bindSearch(inputEl, resultsEl) {
+  if (!inputEl || !resultsEl) return;
+
+  inputEl.addEventListener('input', () => {
+    const q = inputEl.value.trim();
+    if (!q) { resultsEl.classList.remove('show'); return; }
     const matches = calcList.filter(c => c.name.includes(q));
     if (matches.length === 0) {
-      searchResults.innerHTML = '<div class="empty">일치하는 계산기가 없어요</div>';
+      resultsEl.innerHTML = '<div class="empty">일치하는 계산기가 없어요</div>';
     } else {
-      searchResults.innerHTML = matches.map(c => '<a href="' + c.url + '">' + c.name + '</a>').join('');
+      resultsEl.innerHTML = matches.map(c => '<a href="' + c.url + '">' + c.name + '</a>').join('');
     }
-    searchResults.classList.add('show');
+    resultsEl.classList.add('show');
   });
 
-  searchInput.addEventListener('keydown', (e) => {
+  inputEl.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-      const q = searchInput.value.trim();
+      const q = inputEl.value.trim();
       const match = calcList.find(c => c.name.includes(q));
       if (match) location.href = match.url;
     }
   });
 
   document.addEventListener('click', (e) => {
-    if (!e.target.closest('.search-bar')) searchResults.classList.remove('show');
+    if (!e.target.closest('.search-bar') && !e.target.closest('.search-bar-mobile')) {
+      resultsEl.classList.remove('show');
+    }
   });
+}
 
+bindSearch(searchInput, searchResults);
+bindSearch(document.getElementById('calc-search-m'), document.getElementById('search-results-m'));
+
+if (searchInput) {
   document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
       e.preventDefault();
