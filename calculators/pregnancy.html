@@ -12,7 +12,7 @@
 
 <header class="site-header">
   <div class="wrap">
-    <a href="../index.html" class="brand"><span class="seal">計</span>계산박스</a>
+    <a href="../index.html" class="brand"><span class="logo-mark"><svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="8" fill="#1F6F54"/><rect x="7" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="17" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="7" y="17" width="16" height="6" rx="1.5" fill="white"/></svg></span>계산박스</a>
     <nav class="site-nav">
       <a href="../index.html">전체 계산기</a>
       <a href="../about.html">소개</a>
@@ -48,6 +48,7 @@
       <div class="line"><span class="k">현재 분기</span><span class="v" id="r-trimester"></span></div>
       <div class="line"><span class="k">D-day</span><span class="v" id="r-dday"></span></div>
     </div>
+    <button class="btn-share" onclick="shareResult('출산예정일 계산기', 'result')">📤 결과 공유하기 (카카오톡·문자 등)</button>
   </div>
 
   <div class="ad-slot">AD SLOT · 728×90</div>
@@ -60,6 +61,22 @@
       <li>1분기: 0주 ~ 13주 6일</li>
       <li>2분기: 14주 0일 ~ 27주 6일</li>
       <li>3분기: 28주 0일 ~ 출산</li>
+    </ul>
+
+    <h3>태아 성별은 언제부터 알 수 있나요</h3>
+    <p>초음파로 외형상 성별 구분이 가능해지는 시기는 보통 임신 16주 전후이며, 정확도가 높아지는 시점은 임신 20주 전후 정밀초음파(2차 기형아 검사) 때입니다. 다만 태아 자세나 병원 장비에 따라 확인 시기가 조금씩 달라질 수 있습니다. 과거에는 32주 이전 성별 고지를 제한하는 규정이 있었지만, 2008년 헌법재판소의 헌법불합치 결정 이후 폐지되어 지금은 의학적으로 확인되는 시점에 고지받을 수 있습니다.</p>
+
+    <h3>안정기는 언제인가요</h3>
+    <p>흔히 '안정기'라고 부르는 시기는 2분기(14주~27주)를 가리킵니다. 유산 위험이 1분기보다 크게 낮아지고, 입덧 등 초기 증상도 완화되는 경우가 많아 여행이나 활동 계획을 세우기 비교적 수월한 시기로 알려져 있습니다. 다만 개인차가 크므로 반드시 정기 검진을 통해 담당 의사와 상태를 확인하는 것이 중요합니다.</p>
+
+    <h3>주요 임신 주차 참고</h3>
+    <ul>
+      <li>6~8주: 초음파로 아기집·심장박동 확인 가능</li>
+      <li>11~13주: 1차 기형아 검사(목투명대 검사), 이 시기부터 유산 위험 크게 감소</li>
+      <li>16주 전후: 성별 구분 가능 시작</li>
+      <li>20~24주: 2차 정밀초음파(기형아 검사), 성별 확정</li>
+      <li>28주: 3분기 시작, 임신성 당뇨 검사 시기</li>
+      <li>37주 이후: 만삭, 출산 준비 시기</li>
     </ul>
     <div class="disclaimer">이 계산기는 평균적인 생리 주기(28일)를 가정한 추정치입니다. 실제 출산예정일은 초음파 검사 등을 통해 산부인과에서 확인한 날짜를 따르는 것이 정확합니다.</div>
   </div>

@@ -4,7 +4,12 @@
    보이도록 구성.
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Black.woff2') format('woff2');
+  font-weight: 900;
+}
 @font-face {
   font-family: 'Pretendard';
   src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Regular.woff2') format('woff2');
@@ -34,7 +39,7 @@
   --stamp: #B23A2E;
 
   /* Type */
-  --font-display: 'Noto Serif KR', serif;
+  --font-display: 'Pretendard', -apple-system, sans-serif;
   --font-body: 'Pretendard', -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
@@ -52,6 +57,8 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 a { color: inherit; text-decoration: none; }
@@ -82,26 +89,16 @@ img { max-width: 100%; }
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 9px;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: -0.01em;
+  font-weight: 800;
+  font-size: 19px;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
-.brand .seal {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1.5px solid var(--stamp);
-  color: var(--stamp);
+.brand .logo-mark {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 13px;
-  transform: rotate(-8deg);
   flex-shrink: 0;
 }
 .site-nav {
@@ -375,6 +372,25 @@ img { max-width: 100%; }
   width: 100%;
 }
 .btn:hover { background: var(--green-deep); }
+
+.btn-share {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: #EFF6F1;
+  border: 1px solid rgba(255,255,255,0.35);
+  padding: 11px 20px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13.5px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  width: 100%;
+  margin-top: 18px;
+}
+.btn-share:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.55); }
 
 /* ---------- Result stub (receipt-style) ---------- */
 .stub {
