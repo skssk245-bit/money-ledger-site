@@ -235,7 +235,7 @@ function findClosestRatio(w, h) {
   return { ...best, exact: bestDiff < 0.004 };
 }
 
-// ---------- 비율 시각화 (캔버스에 사각형 그리기) ----------
+// ---------- 비율 시각화 (캔버스에 사각형 그리기, 텍스트는 박스 안쪽) ----------
 function drawRatioBox(canvasId, ratioW, ratioH, lines) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
@@ -246,9 +246,9 @@ function drawRatioBox(canvasId, ratioW, ratioH, lines) {
   ctx.fillStyle = '#F2F4F0';
   ctx.fillRect(0, 0, W, H);
 
-  const textAreaHeight = lines.length * 22 + 12;
-  const maxBoxW = W - 48;
-  const maxBoxH = H - 32 - textAreaHeight;
+  const pad = 20;
+  const maxBoxW = W - pad * 2;
+  const maxBoxH = H - pad * 2;
   const ratio = ratioW / ratioH;
 
   let boxW, boxH;
@@ -261,7 +261,7 @@ function drawRatioBox(canvasId, ratioW, ratioH, lines) {
   }
 
   const x = (W - boxW) / 2;
-  const y = 20;
+  const y = (H - boxH) / 2;
 
   ctx.fillStyle = '#1F6F54';
   ctx.fillRect(x, y, boxW, boxH);
@@ -269,22 +269,60 @@ function drawRatioBox(canvasId, ratioW, ratioH, lines) {
   ctx.lineWidth = 2;
   ctx.strokeRect(x, y, boxW, boxH);
 
-  ctx.fillStyle = '#14231C';
-  ctx.font = '600 14px Pretendard, -apple-system, sans-serif';
+  // 박스 안쪽에 텍스트 (충분히 클 때만, 너무 얇으면 박스 아래로)
+  const lineHeight = 20;
+  const requiredHeight = lines.length * lineHeight + 16;
   ctx.textAlign = 'center';
-  let ty = y + boxH + 28;
-  lines.forEach((line) => {
-    ctx.fillText(line, W / 2, ty);
-    ty += 22;
-  });
+  ctx.font = '600 14px Pretendard, -apple-system, sans-serif';
+
+  if (boxH >= requiredHeight) {
+    ctx.fillStyle = '#FFFFFF';
+    ctx.textBaseline = 'middle';
+    const totalTextHeight = lines.length * lineHeight;
+    let ty = y + boxH / 2 - totalTextHeight / 2 + lineHeight / 2;
+    lines.forEach((line) => {
+      ctx.fillText(line, W / 2, ty);
+      ty += lineHeight;
+    });
+  } else {
+    ctx.fillStyle = '#14231C';
+    ctx.textBaseline = 'alphabetic';
+    let ty = y + boxH + 28;
+    lines.forEach((line) => {
+      ctx.fillText(line, W / 2, ty);
+      ty += lineHeight;
+    });
+  }
 }
 
+// ---------- PNG 다운로드: 텍스트·여백 없이 정확한 비율의 순수 이미지만 ----------
 function downloadCanvas(canvasId, filename) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
+  const source = document.getElementById(canvasId);
+  if (!source || !source.dataset.ratioW) return;
+
+  const ratioW = parseFloat(source.dataset.ratioW);
+  const ratioH = parseFloat(source.dataset.ratioH);
+
+  const maxDim = 1200;
+  let w, h;
+  if (ratioW >= ratioH) {
+    w = maxDim;
+    h = Math.round(maxDim * (ratioH / ratioW));
+  } else {
+    h = maxDim;
+    w = Math.round(maxDim * (ratioW / ratioH));
+  }
+
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = w;
+  exportCanvas.height = h;
+  const ctx = exportCanvas.getContext('2d');
+  ctx.fillStyle = '#1F6F54';
+  ctx.fillRect(0, 0, w, h);
+
   const link = document.createElement('a');
   link.download = filename;
-  link.href = canvas.toDataURL('image/png');
+  link.href = exportCanvas.toDataURL('image/png');
   link.click();
 }
 
@@ -309,6 +347,9 @@ function calcFromRatio() {
 
   document.getElementById('r1-final').textContent = formatNumber(finalW) + ' × ' + formatNumber(finalH) + ' px';
   document.getElementById('r1-sub').textContent = ratioW + ':' + ratioH + ' 비율 기준';
+  const canvas1 = document.getElementById('canvas1');
+  canvas1.dataset.ratioW = ratioW;
+  canvas1.dataset.ratioH = ratioH;
   drawRatioBox('canvas1', ratioW, ratioH, [ratioW + ' : ' + ratioH, formatNumber(finalW) + ' × ' + formatNumber(finalH) + ' px']);
   document.getElementById('result1').classList.add('show');
   document.getElementById('result1').scrollIntoView({behavior:'smooth', block:'center'});
@@ -342,6 +383,9 @@ function calcRatioFromSize() {
   const boxLabel = closest.exact
     ? [rw + ' : ' + rh]
     : [rw + ' : ' + rh + ' (정확값)', '≈ ' + closest.w + ':' + closest.h + ' 에 가장 가까움'];
+  const canvas2 = document.getElementById('canvas2');
+  canvas2.dataset.ratioW = w;
+  canvas2.dataset.ratioH = h;
   drawRatioBox('canvas2', w, h, boxLabel);
 
   document.getElementById('result2').classList.add('show');
