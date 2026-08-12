@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>공학 계산기 (삼각함수·로그·거듭제곱) — 계산박스</title>
+<meta name="description" content="사인·코사인·탄젠트, 로그, 제곱근, 거듭제곱 등을 계산하는 버튼식 공학용 계산기입니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+  <meta name="naver-site-verification" content="eafaf6bf07d38d5e996db34eebdcbca21d9ae51a" />
+<style>
+.sci-calc {
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  max-width: 460px;
+  margin: 0 auto;
+}
+.sci-display {
+  background: var(--green-deep);
+  color: #fff;
+  border-radius: 8px;
+  padding: 20px 16px;
+  margin-bottom: 14px;
+  text-align: right;
+  overflow-x: auto;
+}
+.sci-display .expr {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: #9FC6B2;
+  min-height: 16px;
+  white-space: nowrap;
+}
+.sci-display .result {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 700;
+  margin-top: 6px;
+  word-break: break-all;
+}
+.sci-toprow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.sci-mode-toggle {
+  display: flex;
+  gap: 6px;
+}
+.sci-mode-toggle button {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.sci-mode-toggle button.active {
+  background: var(--green);
+  color: #fff;
+  border-color: var(--green);
+}
+.sci-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 7px;
+}
+.sci-grid button {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 4px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.sci-grid button:hover { border-color: var(--green); }
+.sci-grid button.op { background: #EAF1EC; color: var(--green-deep); font-weight: 700; }
+.sci-grid button.eq { background: var(--green); color: #fff; grid-column: span 2; }
+.sci-grid button.eq:hover { background: var(--green-deep); }
+.sci-grid button.fn { font-size: 12.5px; color: var(--ink-soft); }
+.sci-grid button.zero { grid-column: span 2; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="logo-mark"><svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="8" fill="#1F6F54"/><rect x="7" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="17" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="7" y="17" width="16" height="6" rx="1.5" fill="white"/></svg></span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">25 · 수학</div>
+    <h1>공학 계산기</h1>
+    <p>삼각함수, 로그, 제곱근, 거듭제곱 등을 계산하는 버튼식 공학용 계산기입니다.</p>
+  </div>
+
+  <div class="sci-calc">
+    <div class="sci-toprow">
+      <div class="sci-mode-toggle">
+        <button id="deg-btn" class="active" onclick="setAngleMode('deg')">DEG</button>
+        <button id="rad-btn" onclick="setAngleMode('rad')">RAD</button>
+      </div>
+      <button class="btn-share" style="width:auto; padding:6px 14px; font-size:12px; margin:0;" onclick="shareResult('공학 계산기', 'sci-share-target')">📤 공유</button>
+    </div>
+
+    <div class="sci-display" id="sci-share-target">
+      <div class="expr" id="sci-expr">&nbsp;</div>
+      <div class="result" id="sci-result">0</div>
+    </div>
+
+    <div class="sci-grid">
+      <button class="fn" onclick="sciFunc('sin')">sin</button>
+      <button class="fn" onclick="sciFunc('cos')">cos</button>
+      <button class="fn" onclick="sciFunc('tan')">tan</button>
+      <button class="fn" onclick="sciFunc('log')">log</button>
+      <button class="fn" onclick="sciFunc('ln')">ln</button>
+
+      <button class="fn" onclick="sciInsert('(')">(</button>
+      <button class="fn" onclick="sciInsert(')')">)</button>
+      <button class="fn" onclick="sciFunc('sqrt')">√</button>
+      <button class="fn" onclick="sciInsert('^')">xʸ</button>
+      <button class="op" onclick="sciClearAll()">AC</button>
+
+      <button onclick="sciInsert('7')">7</button>
+      <button onclick="sciInsert('8')">8</button>
+      <button onclick="sciInsert('9')">9</button>
+      <button class="op" onclick="sciInsert('/')">÷</button>
+      <button class="op" onclick="sciBackspace()">⌫</button>
+
+      <button onclick="sciInsert('4')">4</button>
+      <button onclick="sciInsert('5')">5</button>
+      <button onclick="sciInsert('6')">6</button>
+      <button class="op" onclick="sciInsert('*')">×</button>
+      <button class="fn" onclick="sciInsert('%')">%</button>
+
+      <button onclick="sciInsert('1')">1</button>
+      <button onclick="sciInsert('2')">2</button>
+      <button onclick="sciInsert('3')">3</button>
+      <button class="op" onclick="sciInsert('-')">−</button>
+      <button class="fn" onclick="sciConst('pi')">π</button>
+
+      <button class="zero" onclick="sciInsert('0')">0</button>
+      <button onclick="sciInsert('.')">.</button>
+      <button class="op" onclick="sciInsert('+')">+</button>
+      <button class="eq" onclick="sciEquals()">=</button>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>사용 방법</h2>
+    <ul>
+      <li>DEG/RAD 버튼으로 삼각함수 각도 단위를 전환할 수 있습니다 (기본값 DEG, 도 단위)</li>
+      <li>sin, cos, tan, log(상용로그), ln(자연로그), √(제곱근) 버튼은 이어서 입력하는 숫자에 함수를 적용합니다</li>
+      <li>xʸ 버튼으로 거듭제곱을 계산할 수 있습니다 (예: 2 xʸ 10 = → 1024)</li>
+      <li>π는 원주율(3.14159...) 값을 바로 입력합니다</li>
+    </ul>
+    <div class="disclaimer">복잡한 수식 입력 시 괄호를 활용해 계산 순서를 명확히 하는 것을 권장합니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="probability.html">확률 계산기</a>
+      <a href="unit-convert.html">단위 변환기</a>
+      <a href="resolution.html">해상도 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+let sciExpr = '';
+let angleMode = 'deg';
+
+function setAngleMode(mode) {
+  angleMode = mode;
+  document.getElementById('deg-btn').classList.toggle('active', mode === 'deg');
+  document.getElementById('rad-btn').classList.toggle('active', mode === 'rad');
+}
+
+function updateExprDisplay() {
+  document.getElementById('sci-expr').textContent = sciExpr || '\u00a0';
+}
+
+function sciInsert(val) {
+  sciExpr += val;
+  updateExprDisplay();
+}
+
+function sciConst(name) {
+  if (name === 'pi') sciExpr += 'π';
+  updateExprDisplay();
+}
+
+function sciFunc(name) {
+  const map = { sin: 'sin(', cos: 'cos(', tan: 'tan(', log: 'log(', ln: 'ln(', sqrt: '√(' };
+  sciExpr += map[name];
+  updateExprDisplay();
+}
+
+function sciBackspace() {
+  sciExpr = sciExpr.slice(0, -1);
+  updateExprDisplay();
+}
+
+function sciClearAll() {
+  sciExpr = '';
+  updateExprDisplay();
+  document.getElementById('sci-result').textContent = '0';
+}
+
+function sciEquals() {
+  if (!sciExpr) return;
+  try {
+    // 삼각함수는 DEG 모드일 때 인자를 라디안으로 변환해서 계산
+    let js = sciExpr
+      .replace(/π/g, '(Math.PI)')
+      .replace(/√\(/g, 'Math.sqrt(')
+      .replace(/\^/g, '**')
+      .replace(/sin\(/g, angleMode === 'deg' ? 'Math.sin(Math.PI/180*' : 'Math.sin(')
+      .replace(/cos\(/g, angleMode === 'deg' ? 'Math.cos(Math.PI/180*' : 'Math.cos(')
+      .replace(/tan\(/g, angleMode === 'deg' ? 'Math.tan(Math.PI/180*' : 'Math.tan(')
+      .replace(/log\(/g, 'Math.log10(')
+      .replace(/ln\(/g, 'Math.log(');
+
+    // 허용된 문자만 있는지 검증 (보안: 임의 코드 실행 방지)
+    const safe = js.replace(/Math\.\w+|PI/g, '');
+    if (!/^[0-9+\-*/().%\s]*$/.test(safe)) {
+      throw new Error('invalid');
+    }
+
+    const value = Function('"use strict"; return (' + js + ')')();
+    if (!isFinite(value)) throw new Error('invalid result');
+
+    const rounded = Math.round(value * 1e10) / 1e10;
+    document.getElementById('sci-result').textContent = rounded.toLocaleString('ko-KR', { maximumFractionDigits: 10 });
+    sciExpr = String(rounded);
+    updateExprDisplay();
+  } catch (e) {
+    document.getElementById('sci-result').textContent = '오류';
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (/[0-9+\-*/().]/.test(e.key)) { sciInsert(e.key); }
+  else if (e.key === 'Enter' || e.key === '=') { sciEquals(); }
+  else if (e.key === 'Backspace') { sciBackspace(); }
+  else if (e.key === 'Escape') { sciClearAll(); }
+});
+</script>
+
+</body>
+</html>

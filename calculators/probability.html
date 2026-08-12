@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>확률 계산기 (로또·순열조합·이항확률) — 계산박스</title>
+<meta name="description" content="로또 등수별 당첨 확률, 순열·조합(nPr, nCr), 이항확률까지 계산하는 확률 계산기입니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+  <meta name="naver-site-verification" content="eafaf6bf07d38d5e996db34eebdcbca21d9ae51a" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="logo-mark"><svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="8" fill="#1F6F54"/><rect x="7" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="17" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="7" y="17" width="16" height="6" rx="1.5" fill="white"/></svg></span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">24 · 수학</div>
+    <h1>확률 계산기</h1>
+    <p>로또 등수별 당첨 확률, 순열·조합, 이항확률까지 한 페이지에서 계산합니다.</p>
+  </div>
+
+  <!-- 도구 1: 로또 당첨 확률 -->
+  <div class="calc-card">
+    <div class="field-row">
+      <div class="field">
+        <label for="lottoTotal">전체 번호 개수</label>
+        <div class="input-unit"><input type="text" id="lottoTotal" inputmode="numeric" value="45"></div>
+      </div>
+      <div class="field">
+        <label for="lottoPick">선택하는 개수</label>
+        <div class="input-unit"><input type="text" id="lottoPick" inputmode="numeric" value="6"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label for="lottoMatch">맞힌 개수</label>
+      <div class="input-unit"><input type="text" id="lottoMatch" inputmode="numeric" value="6"></div>
+    </div>
+    <button class="btn" onclick="calcLotto()">당첨 확률 계산하기</button>
+  </div>
+
+  <div class="stub" id="result1">
+    <div class="stub-label">당첨 확률</div>
+    <div class="stub-amount" id="r1-final">-</div>
+    <div class="stub-sub" id="r1-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">전체 경우의 수</span><span class="v" id="r1-total"></span></div>
+      <div class="line"><span class="k">해당 경우의 수</span><span class="v" id="r1-cases"></span></div>
+    </div>
+    <button class="btn-share" onclick="shareResult('확률 계산기', 'result1')">📤 결과 공유하기 (카카오톡·문자 등)</button>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <!-- 도구 2: 순열과 조합 -->
+  <div class="calc-header" style="padding-top:8px;">
+    <div class="kicker">확률 도구</div>
+    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">순열과 조합</h2>
+    <p style="color:var(--ink-soft); font-size:14.5px; margin:0;">n개 중 r개를 순서를 고려해(순열) 또는 고려하지 않고(조합) 뽑는 경우의 수를 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field-row">
+      <div class="field">
+        <label for="pcN">전체 개수 (n)</label>
+        <div class="input-unit"><input type="text" id="pcN" inputmode="numeric" placeholder="예: 10"></div>
+      </div>
+      <div class="field">
+        <label for="pcR">뽑는 개수 (r)</label>
+        <div class="input-unit"><input type="text" id="pcR" inputmode="numeric" placeholder="예: 3"></div>
+      </div>
+    </div>
+    <button class="btn" onclick="calcPermCombo()">계산하기</button>
+  </div>
+
+  <div class="stub" id="result2">
+    <div class="stub-label">조합 (순서 무관, nCr)</div>
+    <div class="stub-amount" id="r2-final">-</div>
+    <div class="stub-sub" id="r2-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">순열 (순서 고려, nPr)</span><span class="v" id="r2-perm"></span></div>
+    </div>
+    <button class="btn-share" onclick="shareResult('확률 계산기', 'result2')">📤 결과 공유하기 (카카오톡·문자 등)</button>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 336×280</div>
+
+  <!-- 도구 3: 이항확률 -->
+  <div class="calc-header" style="padding-top:8px;">
+    <div class="kicker">확률 도구</div>
+    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">이항확률 계산</h2>
+    <p style="color:var(--ink-soft); font-size:14.5px; margin:0;">동전 던지기, 주사위 등 성공 확률이 정해진 시행을 n번 반복할 때, 정확히 k번 성공할 확률을 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field-row">
+      <div class="field">
+        <label for="binP">1회 성공 확률 (%)</label>
+        <div class="input-unit"><input type="text" id="binP" inputmode="decimal" placeholder="예: 50"></div>
+      </div>
+      <div class="field">
+        <label for="binN">시행 횟수 (n)</label>
+        <div class="input-unit"><input type="text" id="binN" inputmode="numeric" placeholder="예: 10"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label for="binK">성공 횟수 (k)</label>
+      <div class="input-unit"><input type="text" id="binK" inputmode="numeric" placeholder="예: 5"></div>
+    </div>
+    <button class="btn" onclick="calcBinomial()">이항확률 계산하기</button>
+  </div>
+
+  <div class="stub" id="result3">
+    <div class="stub-label">정확히 k번 성공할 확률</div>
+    <div class="stub-amount" id="r3-final">-</div>
+    <div class="stub-sub" id="r3-sub"></div>
+    <button class="btn-share" onclick="shareResult('확률 계산기', 'result3')">📤 결과 공유하기 (카카오톡·문자 등)</button>
+  </div>
+
+  <div class="explain">
+    <h2>확률 계산, 어떻게 이루어지나요</h2>
+    <h3>로또 당첨 확률</h3>
+    <p>전체 n개 번호 중 k개를 선택하는 복권에서, m개를 맞힐 확률은 「(맞힌 조합 수 × 못 맞힌 조합 수) ÷ 전체 조합 수」로 계산합니다. 한국 로또(45개 중 6개)의 1등 확률은 약 814만 5060분의 1입니다.</p>
+    <h3>순열과 조합</h3>
+    <p>순열(nPr)은 순서가 다르면 다른 경우로 세고, 조합(nCr)은 순서를 구분하지 않습니다. 예를 들어 5명 중 3명을 뽑아 줄을 세우면 순열(60가지), 그냥 3명만 뽑으면 조합(10가지)입니다.</p>
+    <h3>이항확률</h3>
+    <p>동전 던지기처럼 성공/실패만 있는 독립 시행을 n번 반복할 때, 정확히 k번 성공할 확률을 계산하는 공식입니다. 여론조사, 품질 검사 등에서도 널리 쓰입니다.</p>
+    <div class="disclaimer">이 계산기는 수학적 확률 이론에 기반한 계산 결과이며, 실제 복권 당첨이나 특정 사건의 발생을 보장하지 않습니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="scientific.html">공학 계산기</a>
+      <a href="unit-convert.html">단위 변환기</a>
+      <a href="date-diff.html">날짜 차이 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function nCr(n, r) {
+  if (r < 0 || r > n) return 0;
+  r = Math.min(r, n - r);
+  let res = 1;
+  for (let i = 0; i < r; i++) {
+    res = (res * (n - i)) / (i + 1);
+  }
+  return Math.round(res);
+}
+
+function nPr(n, r) {
+  if (r < 0 || r > n) return 0;
+  let res = 1;
+  for (let i = 0; i < r; i++) {
+    res *= (n - i);
+  }
+  return res;
+}
+
+// ---------- 도구1: 로또 당첨 확률 ----------
+function calcLotto() {
+  const n = parseInt(document.getElementById('lottoTotal').value);
+  const k = parseInt(document.getElementById('lottoPick').value);
+  const m = parseInt(document.getElementById('lottoMatch').value);
+
+  if (!n || !k || m === '' || m < 0 || k > n || m > k) {
+    alert('전체 개수, 선택 개수, 맞힌 개수를 올바르게 입력해 주세요.');
+    return;
+  }
+
+  const totalCases = nCr(n, k);
+  const matchCases = nCr(k, m) * nCr(n - k, k - m);
+  const prob = matchCases / totalCases;
+
+  document.getElementById('r1-final').textContent = (prob * 100).toFixed(6) + '%';
+  document.getElementById('r1-sub').textContent = n + '개 중 ' + k + '개 선택, ' + m + '개 일치 · 1/' + formatNumber(totalCases / matchCases);
+  document.getElementById('r1-total').textContent = formatNumber(totalCases) + '가지';
+  document.getElementById('r1-cases').textContent = formatNumber(matchCases) + '가지';
+  document.getElementById('result1').classList.add('show');
+  document.getElementById('result1').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// ---------- 도구2: 순열과 조합 ----------
+function calcPermCombo() {
+  const n = parseInt(document.getElementById('pcN').value);
+  const r = parseInt(document.getElementById('pcR').value);
+
+  if (!n || r === '' || r < 0 || r > n) { alert('n과 r을 올바르게 입력해 주세요 (r ≤ n).'); return; }
+
+  const combo = nCr(n, r);
+  const perm = nPr(n, r);
+
+  document.getElementById('r2-final').textContent = formatNumber(combo) + '가지';
+  document.getElementById('r2-sub').textContent = n + '개 중 ' + r + '개 조합 (' + n + 'C' + r + ')';
+  document.getElementById('r2-perm').textContent = formatNumber(perm) + '가지';
+  document.getElementById('result2').classList.add('show');
+  document.getElementById('result2').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// ---------- 도구3: 이항확률 ----------
+function calcBinomial() {
+  const p = parseFloat(document.getElementById('binP').value) / 100;
+  const n = parseInt(document.getElementById('binN').value);
+  const k = parseInt(document.getElementById('binK').value);
+
+  if (isNaN(p) || p < 0 || p > 1 || !n || k === '' || k < 0 || k > n) {
+    alert('성공 확률, 시행 횟수, 성공 횟수를 올바르게 입력해 주세요.');
+    return;
+  }
+
+  const prob = nCr(n, k) * Math.pow(p, k) * Math.pow(1 - p, n - k);
+
+  document.getElementById('r3-final').textContent = (prob * 100).toFixed(3) + '%';
+  document.getElementById('r3-sub').textContent = n + '번 시행 중 성공확률 ' + (p * 100).toFixed(1) + '%일 때, 정확히 ' + k + '번 성공';
+  document.getElementById('result3').classList.add('show');
+  document.getElementById('result3').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>
