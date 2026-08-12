@@ -693,6 +693,20 @@ img { max-width: 100%; }
 }
 .btn-share:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.55); }
 
+.ratio-visual {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px dashed rgba(255,255,255,0.25);
+}
+.ratio-visual canvas {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  margin: 0 auto 12px;
+  border-radius: 6px;
+}
+
 /* ---------- Result stub (receipt-style) ---------- */
 .stub {
   background: var(--green-deep);
