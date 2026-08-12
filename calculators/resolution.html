@@ -326,13 +326,14 @@ function drawRatioBox(canvasId, ratioW, ratioH, lines) {
   ctx.fillText('calcbox.co.kr', x + boxW - 8, y + boxH - 8);
 }
 
-// ---------- PNG 다운로드: 실제 입력 픽셀 크기 그대로 + 워터마크 ----------
+// ---------- PNG 다운로드: 실제 입력 픽셀 크기 + 텍스트 정보 + 워터마크 ----------
 function downloadCanvas(canvasId, filename) {
   const source = document.getElementById(canvasId);
   if (!source || !source.dataset.pxW) return;
 
   const w = parseInt(source.dataset.pxW);
   const h = parseInt(source.dataset.pxH);
+  const lines = JSON.parse(source.dataset.lines || '[]');
 
   const exportCanvas = document.createElement('canvas');
   exportCanvas.width = w;
@@ -341,11 +342,27 @@ function downloadCanvas(canvasId, filename) {
   ctx.fillStyle = '#1F6F54';
   ctx.fillRect(0, 0, w, h);
 
-  // 워터마크 (이미지 크기에 비례한 폰트 크기, 최소 12px)
-  const fontSize = Math.max(12, Math.round(Math.min(w, h) * 0.03));
-  const margin = Math.max(10, Math.round(fontSize * 0.8));
+  // 비율/크기 텍스트 (이미지 전체가 박스이므로 중앙 정렬, 폰트는 이미지 크기에 비례)
+  if (lines.length) {
+    const fontSize = Math.max(14, Math.round(Math.min(w, h) * 0.06));
+    const lineHeight = fontSize * 1.4;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '600 ' + fontSize + 'px Pretendard, -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const totalTextHeight = lines.length * lineHeight;
+    let ty = h / 2 - totalTextHeight / 2 + lineHeight / 2;
+    lines.forEach((line) => {
+      ctx.fillText(line, w / 2, ty);
+      ty += lineHeight;
+    });
+  }
+
+  // 워터마크
+  const wmFont = Math.max(12, Math.round(Math.min(w, h) * 0.03));
+  const margin = Math.max(10, Math.round(wmFont * 0.8));
   ctx.fillStyle = 'rgba(255,255,255,0.6)';
-  ctx.font = '500 ' + fontSize + 'px Consolas, monospace';
+  ctx.font = '500 ' + wmFont + 'px Consolas, monospace';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'bottom';
   ctx.fillText('calcbox.co.kr', w - margin, h - margin);
@@ -387,7 +404,9 @@ function calcFromRatio() {
   const canvas1 = document.getElementById('canvas1');
   canvas1.dataset.pxW = pxW;
   canvas1.dataset.pxH = pxH;
-  drawRatioBox('canvas1', ratioW, ratioH, [ratioW + ' : ' + ratioH, formatByUnit(finalW, unit) + ' × ' + formatByUnit(finalH, unit) + ' ' + uLabel]);
+  const lines1 = [ratioW + ' : ' + ratioH, formatByUnit(finalW, unit) + ' × ' + formatByUnit(finalH, unit) + ' ' + uLabel];
+  canvas1.dataset.lines = JSON.stringify(lines1);
+  drawRatioBox('canvas1', ratioW, ratioH, lines1);
   document.getElementById('result1').classList.add('show');
   document.getElementById('result1').scrollIntoView({behavior:'smooth', block:'center'});
 }
@@ -436,6 +455,7 @@ function calcRatioFromSize() {
   const canvas2 = document.getElementById('canvas2');
   canvas2.dataset.pxW = pxW;
   canvas2.dataset.pxH = pxH;
+  canvas2.dataset.lines = JSON.stringify(boxLabel);
   drawRatioBox('canvas2', w, h, boxLabel);
 
   document.getElementById('result2').classList.add('show');
