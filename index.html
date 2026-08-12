@@ -299,7 +299,7 @@
         <span class="cat-accent"></span>
         <span class="cat-info">
           <span class="cat-title">단위 변환</span>
-          <span class="cat-desc">길이·무게·온도·부피, 해상도</span>
+          <span class="cat-desc">길이·무게·온도·부피, 해상도, PPI</span>
         </span>
         <span class="cat-chevron">▾</span>
       </summary>
@@ -314,7 +314,34 @@
         <a class="ledger-row" href="calculators/resolution.html">
           <span class="num">21</span>
           <span class="title">해상도 계산기
-            <span class="desc">비율 계산, 프리셋 해상도, PPI, SNS 이미지 규격</span>
+            <span class="desc">비율 계산, 프리셋 해상도, 비율 역계산</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+        <a class="ledger-row" href="calculators/ppi.html">
+          <span class="num">22</span>
+          <span class="title">PPI 계산기
+            <span class="desc">해상도·화면 크기 기반 화소밀도 계산</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+    </details>
+
+    <details class="category cat-gold">
+      <summary>
+        <span class="cat-accent"></span>
+        <span class="cat-info">
+          <span class="cat-title">SNS</span>
+          <span class="cat-desc">플랫폼별 권장 이미지 규격</span>
+        </span>
+        <span class="cat-chevron">▾</span>
+      </summary>
+      <div class="cat-items">
+        <a class="ledger-row" href="calculators/sns-image-size.html">
+          <span class="num">23</span>
+          <span class="title">SNS 이미지 규격 계산기
+            <span class="desc">인스타그램·유튜브·페이스북 등 권장 이미지 크기</span>
           </span>
           <span class="arrow">→</span>
         </a>
@@ -443,6 +470,17 @@
             <div class="cc-list">
               <a href="calculators/unit-convert.html">단위 변환기</a>
               <a href="calculators/resolution.html">해상도 계산기</a>
+              <a href="calculators/ppi.html">PPI 계산기</a>
+            </div>
+          </div>
+
+          <div class="catalog-card" id="cat-sns">
+            <div class="cc-head">
+              <div class="cc-icon"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" stroke="white" stroke-width="1.3"/><circle cx="8" cy="8" r="2.5" stroke="white" stroke-width="1.3"/><circle cx="11.3" cy="4.7" r="0.6" fill="white"/></svg></div>
+              <div class="cc-title">SNS</div>
+            </div>
+            <div class="cc-list">
+              <a href="calculators/sns-image-size.html">SNS 이미지 규격 계산기</a>
             </div>
           </div>
 
@@ -502,6 +540,8 @@ const calcList = [
   { name: '날짜 차이 계산기', url: 'calculators/date-diff.html' },
   { name: '단위 변환기', url: 'calculators/unit-convert.html' },
   { name: '해상도 계산기', url: 'calculators/resolution.html' },
+  { name: 'PPI 계산기', url: 'calculators/ppi.html' },
+  { name: 'SNS 이미지 규격 계산기', url: 'calculators/sns-image-size.html' },
   { name: 'BMI 계산기', url: 'calculators/bmi.html' },
   { name: '칼로리 계산기', url: 'calculators/calorie.html' },
   { name: '출산예정일 계산기', url: 'calculators/pregnancy.html' },

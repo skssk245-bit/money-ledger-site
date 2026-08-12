@@ -116,80 +116,21 @@
     <div class="stub-sub" id="r2-sub"></div>
   </div>
 
-  <div class="ad-slot">AD SLOT · 336×280</div>
-
-  <!-- 도구 3: PPI 계산 -->
-  <div class="calc-header" style="padding-top:8px;">
-    <div class="kicker">화면 정보</div>
-    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">PPI(화소밀도) 계산</h2>
-    <p style="color:var(--ink-soft); font-size:14.5px; margin:0;">해상도와 화면 대각선 길이로 인치당 픽셀 수(PPI)를 계산합니다.</p>
-  </div>
-
-  <div class="calc-card">
-    <div class="field-row">
-      <div class="field">
-        <label for="ppiWidth">가로 (px)</label>
-        <div class="input-unit"><input type="text" id="ppiWidth" data-comma inputmode="numeric" placeholder="예: 1920"></div>
-      </div>
-      <div class="field">
-        <label for="ppiHeight">세로 (px)</label>
-        <div class="input-unit"><input type="text" id="ppiHeight" data-comma inputmode="numeric" placeholder="예: 1080"></div>
-      </div>
-    </div>
-    <div class="field">
-      <label for="ppiInch">화면 대각선 크기</label>
-      <div class="input-unit">
-        <input type="text" id="ppiInch" inputmode="decimal" placeholder="예: 24">
-        <span class="unit">인치</span>
-      </div>
-    </div>
-
-    <button class="btn" onclick="calcPPI()">PPI 계산하기</button>
-  </div>
-
-  <div class="stub" id="result3">
-    <div class="stub-label">PPI (인치당 픽셀 수)</div>
-    <div class="stub-amount" id="r3-final">-</div>
-    <div class="stub-sub" id="r3-sub"></div>
-  </div>
-
-  <div class="ad-slot">AD SLOT · 336×280</div>
-
-  <!-- 도구 4: SNS 이미지 규격표 -->
-  <div class="calc-header" style="padding-top:8px;">
-    <div class="kicker">참고 자료</div>
-    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">SNS 권장 이미지 규격</h2>
-    <p style="color:var(--ink-soft); font-size:14.5px; margin:0;">자주 쓰는 SNS·유튜브 이미지 규격을 눌러 바로 확인하세요.</p>
-  </div>
-
-  <div class="calc-card">
-    <div class="related-grid" style="grid-template-columns:repeat(2,1fr);">
-      <a href="#" class="sns-preset" data-w="1080" data-h="1080">인스타그램 정사각형 (1080×1080)</a>
-      <a href="#" class="sns-preset" data-w="1080" data-h="1350">인스타그램 세로 피드 (1080×1350)</a>
-      <a href="#" class="sns-preset" data-w="1080" data-h="1920">인스타그램/틱톡 스토리·릴스 (1080×1920)</a>
-      <a href="#" class="sns-preset" data-w="1280" data-h="720">유튜브 썸네일 (1280×720)</a>
-      <a href="#" class="sns-preset" data-w="2560" data-h="1440">유튜브 채널 아트 (2560×1440)</a>
-      <a href="#" class="sns-preset" data-w="820" data-h="312">페이스북 커버 (820×312)</a>
-    </div>
-  </div>
-
   <div class="explain">
     <h2>이럴 때 유용해요</h2>
     <ul>
       <li>영상 편집·디자인 작업 시 원하는 비율로 캔버스 크기 설정</li>
       <li>사진을 특정 비율로 자르기(크롭) 전 정확한 픽셀 크기 확인</li>
-      <li>모니터·노트북 구매 전 화면 선명도(PPI) 비교</li>
-      <li>SNS 업로드용 이미지를 규격에 맞게 미리 준비</li>
+      <li>기존 이미지·영상의 해상도가 어떤 비율인지 빠르게 확인</li>
     </ul>
-    <div class="disclaimer">SNS 권장 규격은 각 플랫폼 정책 변경에 따라 달라질 수 있습니다. 업로드 전 해당 플랫폼의 최신 가이드를 확인하는 것이 안전합니다.</div>
   </div>
 
   <div class="related">
     <div class="related-title">함께 보면 좋은 계산기</div>
     <div class="related-grid">
+      <a href="ppi.html">PPI 계산기</a>
+      <a href="sns-image-size.html">SNS 이미지 규격 계산기</a>
       <a href="unit-convert.html">단위 변환기</a>
-      <a href="date-diff.html">날짜 차이 계산기</a>
-      <a href="bmi.html">BMI 계산기</a>
     </div>
   </div>
 
@@ -253,16 +194,6 @@ document.querySelectorAll('#res-presets a').forEach(a => {
   });
 });
 
-document.querySelectorAll('.sns-preset').forEach(a => {
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('checkWidth').value = formatNumber(a.dataset.w);
-    document.getElementById('checkHeight').value = formatNumber(a.dataset.h);
-    calcRatioFromSize();
-    document.getElementById('result2').scrollIntoView({behavior:'smooth', block:'center'});
-  });
-});
-
 function gcd(a, b) { return b ? gcd(b, a % b) : a; }
 
 const knownRatios = [
@@ -294,22 +225,6 @@ function calcRatioFromSize() {
   document.getElementById('r2-final').textContent = rw + ' : ' + rh;
   document.getElementById('r2-sub').textContent = formatNumber(w) + '×' + formatNumber(h) + ' px' + (matched ? ' · ' + matched : '');
   document.getElementById('result2').classList.add('show');
-}
-
-// ---------- 도구3: PPI 계산 ----------
-function calcPPI() {
-  const w = parseNumber(document.getElementById('ppiWidth').value);
-  const h = parseNumber(document.getElementById('ppiHeight').value);
-  const inch = parseFloat(document.getElementById('ppiInch').value);
-
-  if (!w || !h || !inch) { alert('가로, 세로, 화면 크기를 모두 입력해 주세요.'); return; }
-
-  const diagonalPx = Math.sqrt(w * w + h * h);
-  const ppi = diagonalPx / inch;
-
-  document.getElementById('r3-final').textContent = Math.round(ppi) + ' PPI';
-  document.getElementById('r3-sub').textContent = formatNumber(w) + '×' + formatNumber(h) + ' px · ' + inch + '인치 화면 기준';
-  document.getElementById('result3').classList.add('show');
 }
 </script>
 

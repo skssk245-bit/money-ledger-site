@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPI 계산기 (화소밀도) — 계산박스</title>
+<meta name="description" content="해상도와 화면 대각선 크기(인치)로 PPI(인치당 픽셀 수)를 계산합니다. 모니터·스마트폰 화질 비교에 유용합니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+  <meta name="naver-site-verification" content="eafaf6bf07d38d5e996db34eebdcbca21d9ae51a" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="logo-mark"><svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="8" fill="#1F6F54"/><rect x="7" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="17" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="7" y="17" width="16" height="6" rx="1.5" fill="white"/></svg></span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">22 · 단위 변환</div>
+    <h1>PPI 계산기</h1>
+    <p>해상도와 화면 대각선 크기(인치)를 입력하면 인치당 픽셀 수(PPI), 즉 화소밀도를 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field-row">
+      <div class="field">
+        <label for="ppiWidth">가로 (px)</label>
+        <div class="input-unit"><input type="text" id="ppiWidth" data-comma inputmode="numeric" placeholder="예: 1920"></div>
+      </div>
+      <div class="field">
+        <label for="ppiHeight">세로 (px)</label>
+        <div class="input-unit"><input type="text" id="ppiHeight" data-comma inputmode="numeric" placeholder="예: 1080"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label for="ppiInch">화면 대각선 크기</label>
+      <div class="input-unit">
+        <input type="text" id="ppiInch" inputmode="decimal" placeholder="예: 24">
+        <span class="unit">인치</span>
+      </div>
+    </div>
+
+    <button class="btn" onclick="calcPPI()">PPI 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">PPI (인치당 픽셀 수)</div>
+    <div class="stub-amount" id="r-final">-</div>
+    <div class="stub-sub" id="r-sub"></div>
+    <button class="btn-share" onclick="shareResult('PPI 계산기', 'result')">📤 결과 공유하기 (카카오톡·문자 등)</button>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>PPI가 뭔가요</h2>
+    <p>PPI(Pixels Per Inch)는 화면 1인치 안에 몇 개의 픽셀이 들어가는지를 나타내는 수치입니다. 같은 해상도라도 화면 크기가 작을수록 PPI가 높아져 더 선명하게 보입니다. 스마트폰은 보통 400~460 PPI, 일반 모니터는 90~110 PPI 정도입니다.</p>
+    <h3>계산식</h3>
+    <p>PPI = √(가로 픽셀² + 세로 픽셀²) ÷ 화면 대각선 길이(인치)</p>
+    <div class="disclaimer">계산 결과는 이론적인 수치이며, 실제 체감 화질은 화면 재질, 밝기, 시야각 등 다른 요소에도 영향을 받습니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="resolution.html">해상도 계산기</a>
+      <a href="sns-image-size.html">SNS 이미지 규격 계산기</a>
+      <a href="unit-convert.html">단위 변환기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function calcPPI() {
+  const w = parseNumber(document.getElementById('ppiWidth').value);
+  const h = parseNumber(document.getElementById('ppiHeight').value);
+  const inch = parseFloat(document.getElementById('ppiInch').value);
+
+  if (!w || !h || !inch) { alert('가로, 세로, 화면 크기를 모두 입력해 주세요.'); return; }
+
+  const diagonalPx = Math.sqrt(w * w + h * h);
+  const ppi = diagonalPx / inch;
+
+  document.getElementById('r-final').textContent = Math.round(ppi) + ' PPI';
+  document.getElementById('r-sub').textContent = formatNumber(w) + '×' + formatNumber(h) + ' px · ' + inch + '인치 화면 기준';
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

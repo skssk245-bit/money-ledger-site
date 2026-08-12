@@ -25,4 +25,6 @@
   <url><loc>https://www.calcbox.co.kr/calculators/capital-gains-tax.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.calcbox.co.kr/calculators/brokerage-fee.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.calcbox.co.kr/calculators/resolution.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.calcbox.co.kr/calculators/ppi.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://www.calcbox.co.kr/calculators/sns-image-size.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
