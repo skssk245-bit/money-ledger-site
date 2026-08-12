@@ -453,6 +453,7 @@ img { max-width: 100%; }
   padding: 7px 14px;
 }
 .chips-row a:hover { border-color: var(--green); }
+.chips-row .chip-active { background: var(--green); color: #fff; border-color: var(--green); }
 
 /* ---------- Category accordion (home) ---------- */
 .category-list {
