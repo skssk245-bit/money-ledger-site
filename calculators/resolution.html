@@ -317,9 +317,16 @@ function drawRatioBox(canvasId, ratioW, ratioH, lines) {
       ty += lineHeight;
     });
   }
+
+  // 워터마크
+  ctx.fillStyle = 'rgba(255,255,255,0.55)';
+  ctx.font = '500 10px Consolas, monospace';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('calcbox.co.kr', x + boxW - 8, y + boxH - 8);
 }
 
-// ---------- PNG 다운로드: 텍스트·여백 없이 실제 입력 픽셀 크기 그대로 ----------
+// ---------- PNG 다운로드: 실제 입력 픽셀 크기 그대로 + 워터마크 ----------
 function downloadCanvas(canvasId, filename) {
   const source = document.getElementById(canvasId);
   if (!source || !source.dataset.pxW) return;
@@ -333,6 +340,15 @@ function downloadCanvas(canvasId, filename) {
   const ctx = exportCanvas.getContext('2d');
   ctx.fillStyle = '#1F6F54';
   ctx.fillRect(0, 0, w, h);
+
+  // 워터마크 (이미지 크기에 비례한 폰트 크기, 최소 12px)
+  const fontSize = Math.max(12, Math.round(Math.min(w, h) * 0.03));
+  const margin = Math.max(10, Math.round(fontSize * 0.8));
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.font = '500 ' + fontSize + 'px Consolas, monospace';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText('calcbox.co.kr', w - margin, h - margin);
 
   const link = document.createElement('a');
   link.download = filename;
