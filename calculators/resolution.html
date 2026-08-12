@@ -295,23 +295,13 @@ function drawRatioBox(canvasId, ratioW, ratioH, lines) {
   }
 }
 
-// ---------- PNG 다운로드: 텍스트·여백 없이 정확한 비율의 순수 이미지만 ----------
+// ---------- PNG 다운로드: 텍스트·여백 없이 실제 입력 픽셀 크기 그대로 ----------
 function downloadCanvas(canvasId, filename) {
   const source = document.getElementById(canvasId);
-  if (!source || !source.dataset.ratioW) return;
+  if (!source || !source.dataset.pxW) return;
 
-  const ratioW = parseFloat(source.dataset.ratioW);
-  const ratioH = parseFloat(source.dataset.ratioH);
-
-  const maxDim = 1200;
-  let w, h;
-  if (ratioW >= ratioH) {
-    w = maxDim;
-    h = Math.round(maxDim * (ratioH / ratioW));
-  } else {
-    h = maxDim;
-    w = Math.round(maxDim * (ratioW / ratioH));
-  }
+  const w = parseInt(source.dataset.pxW);
+  const h = parseInt(source.dataset.pxH);
 
   const exportCanvas = document.createElement('canvas');
   exportCanvas.width = w;
@@ -348,8 +338,8 @@ function calcFromRatio() {
   document.getElementById('r1-final').textContent = formatNumber(finalW) + ' × ' + formatNumber(finalH) + ' px';
   document.getElementById('r1-sub').textContent = ratioW + ':' + ratioH + ' 비율 기준';
   const canvas1 = document.getElementById('canvas1');
-  canvas1.dataset.ratioW = ratioW;
-  canvas1.dataset.ratioH = ratioH;
+  canvas1.dataset.pxW = finalW;
+  canvas1.dataset.pxH = finalH;
   drawRatioBox('canvas1', ratioW, ratioH, [ratioW + ' : ' + ratioH, formatNumber(finalW) + ' × ' + formatNumber(finalH) + ' px']);
   document.getElementById('result1').classList.add('show');
   document.getElementById('result1').scrollIntoView({behavior:'smooth', block:'center'});
@@ -384,8 +374,8 @@ function calcRatioFromSize() {
     ? [rw + ' : ' + rh]
     : [rw + ' : ' + rh + ' (정확값)', '≈ ' + closest.w + ':' + closest.h + ' 에 가장 가까움'];
   const canvas2 = document.getElementById('canvas2');
-  canvas2.dataset.ratioW = w;
-  canvas2.dataset.ratioH = h;
+  canvas2.dataset.pxW = w;
+  canvas2.dataset.pxH = h;
   drawRatioBox('canvas2', w, h, boxLabel);
 
   document.getElementById('result2').classList.add('show');
