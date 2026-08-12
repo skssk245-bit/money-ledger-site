@@ -26,10 +26,75 @@
   <div class="calc-header">
     <div class="kicker">21 · 단위 변환</div>
     <h1>해상도 계산기</h1>
-    <p>원하는 비율로 해상도를 계산하거나, 두 값으로 비율을 역산하고, PPI와 SNS 이미지 권장 규격까지 한 페이지에서 확인합니다.</p>
+    <p>자주 쓰는 해상도를 불러오거나 두 값으로 비율을 확인하고, 원하는 비율로 해상도를 계산하는 것까지 한 페이지에서 처리합니다.</p>
   </div>
 
-  <!-- 도구 1: 비율로 해상도 계산 -->
+  <!-- 도구 1: 프리셋 해상도 + 역계산 -->
+  <div class="calc-card">
+    <div class="field">
+      <label>해상도 프리셋</label>
+      <div class="chips-row" id="res-presets" style="margin-top:6px;">
+        <a href="#" data-w="1280" data-h="720">HD (1280×720)</a>
+        <a href="#" data-w="1920" data-h="1080">FHD (1920×1080)</a>
+        <a href="#" data-w="2560" data-h="1440">QHD (2560×1440)</a>
+        <a href="#" data-w="3840" data-h="2160">4K UHD (3840×2160)</a>
+        <a href="#" data-w="7680" data-h="4320">8K UHD (7680×4320)</a>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="unit2">입력 단위</label>
+      <div class="input-unit">
+        <select id="unit2" onchange="toggleDpiField('unit2','dpi2-field')">
+          <option value="px">픽셀 (px)</option>
+          <option value="cm">센티미터 (cm)</option>
+          <option value="mm">밀리미터 (mm)</option>
+          <option value="in">인치 (in)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="checkWidth">가로</label>
+        <div class="input-unit"><input type="text" id="checkWidth" inputmode="decimal" placeholder="예: 1920"></div>
+      </div>
+      <div class="field">
+        <label for="checkHeight">세로</label>
+        <div class="input-unit"><input type="text" id="checkHeight" inputmode="decimal" placeholder="예: 1080"></div>
+      </div>
+    </div>
+
+    <div class="field" id="dpi2-field" style="display:none;">
+      <label for="dpi2">해상도(DPI) <span class="hint">PNG 다운로드 시 픽셀 변환에 사용, 인쇄용 300 권장</span></label>
+      <div class="input-unit"><input type="text" id="dpi2" inputmode="numeric" value="300"></div>
+    </div>
+
+    <button class="btn" onclick="calcRatioFromSize()">비율 확인하기</button>
+  </div>
+
+  <div class="stub" id="result2">
+    <div class="stub-label">비율</div>
+    <div class="stub-amount" id="r2-final">-</div>
+    <div class="stub-sub" id="r2-sub"></div>
+    <div class="stub-table" id="r2-closest-wrap" style="display:none;">
+      <div class="line"><span class="k">가장 가까운 표준 비율</span><span class="v" id="r2-closest"></span></div>
+    </div>
+    <div class="ratio-visual">
+      <canvas id="canvas2" width="320" height="260"></canvas>
+      <button class="btn-share" onclick="downloadCanvas('canvas2', 'resolution-ratio.png')">🖼️ 비율 이미지 PNG 다운로드</button>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <!-- 도구 2: 비율로 해상도 계산 -->
+  <div class="calc-header" style="padding-top:8px;">
+    <div class="kicker">해상도 도구</div>
+    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">비율로 해상도 계산</h2>
+    <p style="color:var(--ink-soft); font-size:14.5px; margin:0;">원하는 비율을 정하고 가로 또는 세로 중 하나만 입력하면 나머지를 계산합니다.</p>
+  </div>
+
   <div class="calc-card">
     <div class="field">
       <label>비율 선택</label>
@@ -54,15 +119,32 @@
       </div>
     </div>
 
+    <div class="field">
+      <label for="unit1">입력 단위</label>
+      <div class="input-unit">
+        <select id="unit1" onchange="toggleDpiField('unit1','dpi1-field')">
+          <option value="px">픽셀 (px)</option>
+          <option value="cm">센티미터 (cm)</option>
+          <option value="mm">밀리미터 (mm)</option>
+          <option value="in">인치 (in)</option>
+        </select>
+      </div>
+    </div>
+
     <div class="field-row">
       <div class="field">
-        <label for="baseWidth">가로 (px) <span class="hint">둘 중 하나만 입력</span></label>
-        <div class="input-unit"><input type="text" id="baseWidth" data-comma inputmode="numeric" placeholder="예: 1920"></div>
+        <label for="baseWidth">가로 <span class="hint">둘 중 하나만 입력</span></label>
+        <div class="input-unit"><input type="text" id="baseWidth" inputmode="decimal" placeholder="예: 1920"></div>
       </div>
       <div class="field">
-        <label for="baseHeight">세로 (px)</label>
-        <div class="input-unit"><input type="text" id="baseHeight" data-comma inputmode="numeric" placeholder="예: 1080"></div>
+        <label for="baseHeight">세로</label>
+        <div class="input-unit"><input type="text" id="baseHeight" inputmode="decimal" placeholder="예: 1080"></div>
       </div>
+    </div>
+
+    <div class="field" id="dpi1-field" style="display:none;">
+      <label for="dpi1">해상도(DPI) <span class="hint">PNG 다운로드 시 픽셀 변환에 사용, 인쇄용 300 권장</span></label>
+      <div class="input-unit"><input type="text" id="dpi1" inputmode="numeric" value="300"></div>
     </div>
 
     <button class="btn" onclick="calcFromRatio()">비율로 계산하기</button>
@@ -77,54 +159,6 @@
       <button class="btn-share" onclick="downloadCanvas('canvas1', 'resolution-ratio.png')">🖼️ 비율 이미지 PNG 다운로드</button>
     </div>
     <button class="btn-share" onclick="shareResult('해상도 계산기', 'result1')">📤 결과 공유하기 (카카오톡·문자 등)</button>
-  </div>
-
-  <div class="ad-slot">AD SLOT · 728×90</div>
-
-  <!-- 도구 2: 프리셋 해상도 + 역계산 -->
-  <div class="calc-header" style="padding-top:8px;">
-    <div class="kicker">해상도 도구</div>
-    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">해상도 프리셋 · 비율 역계산</h2>
-    <p style="color:var(--ink-soft); font-size:14.5px; margin:0;">자주 쓰는 해상도를 불러오거나, 두 값을 입력해 어떤 비율인지 확인합니다.</p>
-  </div>
-
-  <div class="calc-card">
-    <div class="field">
-      <label>해상도 프리셋</label>
-      <div class="chips-row" id="res-presets" style="margin-top:6px;">
-        <a href="#" data-w="1280" data-h="720">HD (1280×720)</a>
-        <a href="#" data-w="1920" data-h="1080">FHD (1920×1080)</a>
-        <a href="#" data-w="2560" data-h="1440">QHD (2560×1440)</a>
-        <a href="#" data-w="3840" data-h="2160">4K UHD (3840×2160)</a>
-        <a href="#" data-w="7680" data-h="4320">8K UHD (7680×4320)</a>
-      </div>
-    </div>
-
-    <div class="field-row">
-      <div class="field">
-        <label for="checkWidth">가로 (px)</label>
-        <div class="input-unit"><input type="text" id="checkWidth" data-comma inputmode="numeric" placeholder="예: 1920"></div>
-      </div>
-      <div class="field">
-        <label for="checkHeight">세로 (px)</label>
-        <div class="input-unit"><input type="text" id="checkHeight" data-comma inputmode="numeric" placeholder="예: 1080"></div>
-      </div>
-    </div>
-
-    <button class="btn" onclick="calcRatioFromSize()">비율 확인하기</button>
-  </div>
-
-  <div class="stub" id="result2">
-    <div class="stub-label">비율</div>
-    <div class="stub-amount" id="r2-final">-</div>
-    <div class="stub-sub" id="r2-sub"></div>
-    <div class="stub-table" id="r2-closest-wrap" style="display:none;">
-      <div class="line"><span class="k">가장 가까운 표준 비율</span><span class="v" id="r2-closest"></span></div>
-    </div>
-    <div class="ratio-visual">
-      <canvas id="canvas2" width="320" height="260"></canvas>
-      <button class="btn-share" onclick="downloadCanvas('canvas2', 'resolution-ratio.png')">🖼️ 비율 이미지 PNG 다운로드</button>
-    </div>
   </div>
 
   <div class="explain">
@@ -171,41 +205,31 @@ document.querySelectorAll('#ratio-presets a').forEach(a => {
   });
 });
 
-// ---------- 도구1: 비율로 해상도 계산 ----------
-function calcFromRatio() {
-  const ratioW = parseFloat(document.getElementById('ratioW').value);
-  const ratioH = parseFloat(document.getElementById('ratioH').value);
-  const width = parseNumber(document.getElementById('baseWidth').value);
-  const height = parseNumber(document.getElementById('baseHeight').value);
-
-  if (!ratioW || !ratioH) { alert('비율을 입력해 주세요.'); return; }
-  if (!width && !height) { alert('가로 또는 세로 중 하나를 입력해 주세요.'); return; }
-
-  let finalW, finalH;
-  if (width) {
-    finalW = width;
-    finalH = Math.round(width * (ratioH / ratioW));
-  } else {
-    finalH = height;
-    finalW = Math.round(height * (ratioW / ratioH));
-  }
-
-  document.getElementById('r1-final').textContent = formatNumber(finalW) + ' × ' + formatNumber(finalH) + ' px';
-  document.getElementById('r1-sub').textContent = ratioW + ':' + ratioH + ' 비율 기준';
-  document.getElementById('result1').classList.add('show');
-  document.getElementById('result1').scrollIntoView({behavior:'smooth', block:'center'});
-}
-
-// ---------- 도구2: 해상도 프리셋 + 역계산 ----------
-document.querySelectorAll('#res-presets a').forEach(a => {
-  a.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.getElementById('checkWidth').value = formatNumber(a.dataset.w);
-    document.getElementById('checkHeight').value = formatNumber(a.dataset.h);
-  });
-});
+// ---------- 도구1: 비율로 해상도 계산 (아래 최신 버전 사용) ----------
 
 function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+
+// ---------- 단위 변환 헬퍼 ----------
+function toggleDpiField(selectId, fieldId) {
+  const unit = document.getElementById(selectId).value;
+  document.getElementById(fieldId).style.display = unit === 'px' ? 'none' : 'block';
+}
+
+function unitToPx(value, unit, dpi) {
+  if (unit === 'px') return value;
+  if (unit === 'in') return value * dpi;
+  if (unit === 'cm') return (value / 2.54) * dpi;
+  if (unit === 'mm') return (value / 25.4) * dpi;
+  return value;
+}
+
+function formatByUnit(value, unit) {
+  return unit === 'px' ? formatNumber(value) : value.toFixed(2);
+}
+
+function unitLabel(unit) {
+  return { px: 'px', cm: 'cm', mm: 'mm', in: 'in' }[unit];
+}
 
 const knownRatios = [
   { w: 16, h: 9, name: '16:9 (와이드스크린, FHD/4K 등)' },
@@ -320,6 +344,8 @@ function downloadCanvas(canvasId, filename) {
 function calcFromRatio() {
   const ratioW = parseFloat(document.getElementById('ratioW').value);
   const ratioH = parseFloat(document.getElementById('ratioH').value);
+  const unit = document.getElementById('unit1').value;
+  const dpi = parseFloat(document.getElementById('dpi1').value) || 300;
   const width = parseNumber(document.getElementById('baseWidth').value);
   const height = parseNumber(document.getElementById('baseHeight').value);
 
@@ -329,18 +355,23 @@ function calcFromRatio() {
   let finalW, finalH;
   if (width) {
     finalW = width;
-    finalH = Math.round(width * (ratioH / ratioW));
+    finalH = width * (ratioH / ratioW);
   } else {
     finalH = height;
-    finalW = Math.round(height * (ratioW / ratioH));
+    finalW = height * (ratioW / ratioH);
   }
+  if (unit === 'px') { finalW = Math.round(finalW); finalH = Math.round(finalH); }
 
-  document.getElementById('r1-final').textContent = formatNumber(finalW) + ' × ' + formatNumber(finalH) + ' px';
+  const uLabel = unitLabel(unit);
+  document.getElementById('r1-final').textContent = formatByUnit(finalW, unit) + ' × ' + formatByUnit(finalH, unit) + ' ' + uLabel;
   document.getElementById('r1-sub').textContent = ratioW + ':' + ratioH + ' 비율 기준';
+
+  const pxW = Math.round(unitToPx(finalW, unit, dpi));
+  const pxH = Math.round(unitToPx(finalH, unit, dpi));
   const canvas1 = document.getElementById('canvas1');
-  canvas1.dataset.pxW = finalW;
-  canvas1.dataset.pxH = finalH;
-  drawRatioBox('canvas1', ratioW, ratioH, [ratioW + ' : ' + ratioH, formatNumber(finalW) + ' × ' + formatNumber(finalH) + ' px']);
+  canvas1.dataset.pxW = pxW;
+  canvas1.dataset.pxH = pxH;
+  drawRatioBox('canvas1', ratioW, ratioH, [ratioW + ' : ' + ratioH, formatByUnit(finalW, unit) + ' × ' + formatByUnit(finalH, unit) + ' ' + uLabel]);
   document.getElementById('result1').classList.add('show');
   document.getElementById('result1').scrollIntoView({behavior:'smooth', block:'center'});
 }
@@ -349,33 +380,46 @@ function calcFromRatio() {
 document.querySelectorAll('#res-presets a').forEach(a => {
   a.addEventListener('click', (e) => {
     e.preventDefault();
-    document.getElementById('checkWidth').value = formatNumber(a.dataset.w);
-    document.getElementById('checkHeight').value = formatNumber(a.dataset.h);
+    document.getElementById('unit2').value = 'px';
+    toggleDpiField('unit2', 'dpi2-field');
+    document.getElementById('checkWidth').value = a.dataset.w;
+    document.getElementById('checkHeight').value = a.dataset.h;
   });
 });
 
 function calcRatioFromSize() {
   const w = parseNumber(document.getElementById('checkWidth').value);
   const h = parseNumber(document.getElementById('checkHeight').value);
+  const unit = document.getElementById('unit2').value;
+  const dpi = parseFloat(document.getElementById('dpi2').value) || 300;
   if (!w || !h) { alert('가로와 세로를 모두 입력해 주세요.'); return; }
 
-  const g = gcd(w, h);
-  const rw = w / g;
-  const rh = h / g;
   const closest = findClosestRatio(w, h);
+  const uLabel = unitLabel(unit);
 
-  document.getElementById('r2-final').textContent = rw + ' : ' + rh;
-  document.getElementById('r2-sub').textContent = formatNumber(w) + '×' + formatNumber(h) + ' px 기준 정확한 약분값';
+  let exactRatioText;
+  if (unit === 'px' && Number.isInteger(w) && Number.isInteger(h)) {
+    const g = gcd(w, h);
+    exactRatioText = (w / g) + ' : ' + (h / g);
+  } else {
+    exactRatioText = (w / h).toFixed(3) + ' : 1';
+  }
+
+  document.getElementById('r2-final').textContent = exactRatioText;
+  document.getElementById('r2-sub').textContent = formatByUnit(w, unit) + '×' + formatByUnit(h, unit) + ' ' + uLabel + ' 기준';
 
   document.getElementById('r2-closest-wrap').style.display = 'grid';
   document.getElementById('r2-closest').textContent = closest.name + (closest.exact ? ' · 정확히 일치' : ' · 가장 가까운 비율');
 
   const boxLabel = closest.exact
-    ? [rw + ' : ' + rh]
-    : [rw + ' : ' + rh + ' (정확값)', '≈ ' + closest.w + ':' + closest.h + ' 에 가장 가까움'];
+    ? [exactRatioText]
+    : [exactRatioText, '≈ ' + closest.w + ':' + closest.h + ' 에 가장 가까움'];
+
+  const pxW = Math.round(unitToPx(w, unit, dpi));
+  const pxH = Math.round(unitToPx(h, unit, dpi));
   const canvas2 = document.getElementById('canvas2');
-  canvas2.dataset.pxW = w;
-  canvas2.dataset.pxH = h;
+  canvas2.dataset.pxW = pxW;
+  canvas2.dataset.pxH = pxH;
   drawRatioBox('canvas2', w, h, boxLabel);
 
   document.getElementById('result2').classList.add('show');
