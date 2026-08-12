@@ -325,47 +325,54 @@ img { max-width: 100%; }
 .catalog-layout {
   display: block;
 }
-.catalog-grid {
+
+/* ---------- 카테고리 타일 그리드 + 펼침 패널 ---------- */
+.tile-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
 }
-.catalog-card {
+.tile {
   background: var(--paper-card);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 20px;
-  scroll-margin-top: 88px;
+  border-radius: 10px;
+  padding: 16px 8px;
+  text-align: center;
+  cursor: pointer;
 }
-.catalog-card .cc-head {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-.catalog-card .cc-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-  background: var(--green);
+.tile:hover { border-color: var(--seal-color, var(--green)); }
+.tile.active { border: 2px solid var(--seal-color, var(--green)); padding: 15px 7px; }
+.tile .tile-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: var(--seal-color, var(--green));
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  margin: 0 auto 8px;
 }
-.catalog-card .cc-title { font-size: 15px; font-weight: 700; color: var(--ink); }
-.catalog-card .cc-list { display: flex; flex-direction: column; gap: 3px; }
-.catalog-card .cc-list a {
-  font-size: 13px;
-  color: var(--ink-soft);
-  padding: 3px 0;
+.tile .tile-name { font-size: 12px; font-weight: 700; color: var(--ink); }
+.tile.active .tile-name { color: var(--seal-color, var(--green)); }
+.tile .tile-count { font-size: 10.5px; color: var(--ink-soft); margin-top: 2px; }
+
+.expand-panel {
+  background: var(--paper-card);
+  border: 1px solid var(--green);
+  border-radius: var(--radius);
+  padding: 16px 20px;
 }
-.catalog-card .cc-list a:hover { color: var(--green); }
+.expand-panel .ep-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+.expand-panel a.ledger-row:last-child { border-bottom: none; }
+
 @media (max-width: 1140px) {
-  .catalog-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 900px) {
-  .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+  .tile-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* ---------- Footer ---------- */
