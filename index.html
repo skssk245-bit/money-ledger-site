@@ -31,10 +31,10 @@
 <main>
 
   <div class="wrap-wide desktop-only">
-    <section class="hero-grid">
+    <section class="hero-grid hero-grid-single">
       <div class="hero-text">
         <div class="eyebrow">CALC BOX · 생활 속 모든 계산</div>
-        <h1>대출부터 만 나이까지.<br>누구나 한번쯤 해보는 계산.</h1>
+        <h1>이거 계산 어디서 하지?<br>카테고리 눌러 바로 찾으세요.</h1>
         <p>재테크, 날짜, 건강, 단위변환까지 — 자주 찾는 계산기를 장부 정리하듯 한 곳에 모았습니다.<br>회원가입 없이 결과부터 바로 확인하세요.</p>
         <div class="quick-links">
           <a href="calculators/age.html"><span class="qnum">1</span>만 나이 계산기<span class="arrow">→</span></a>
@@ -42,34 +42,13 @@
           <a href="calculators/bmi.html"><span class="qnum">3</span>BMI 계산기<span class="arrow">→</span></a>
         </div>
       </div>
-
-      <div class="widget-panel">
-        <div class="widget-header">
-          <span class="widget-title">연봉 실수령액 계산</span>
-          <a href="#catalog" class="widget-switch">다른 계산기 선택 →</a>
-        </div>
-        <div class="widget-fields" style="grid-template-columns: 1fr;">
-          <div>
-            <label for="w-salary">연봉 (세전) <span class="wf-unit">원</span></label>
-            <div class="input-unit"><input type="text" id="w-salary" data-comma inputmode="numeric" value="45,000,000"></div>
-          </div>
-        </div>
-        <div class="widget-result">
-          <div>
-            <div class="wr-label">월 예상 실수령액</div>
-            <div class="wr-amount" id="w-result">-</div>
-          </div>
-          <div class="wr-badge" id="w-badge">-</div>
-        </div>
-        <a href="calculators/salary.html" class="btn">자세히 계산하기 →</a>
-      </div>
     </section>
   </div>
 
   <div class="wrap mobile-only">
     <section class="hero">
       <div class="eyebrow">CALC BOX · 생활 속 모든 계산</div>
-      <h1>대출부터 만 나이까지.<br>누구나 한번쯤 해보는 계산.</h1>
+      <h1>이거 계산 어디서 하지?<br>카테고리 눌러 바로 찾으세요.</h1>
       <p>재테크, 날짜, 건강, 단위변환까지 — 자주 찾는 계산기를 장부 정리하듯 한 곳에 모았습니다.<br>회원가입 없이 결과부터 바로 확인하세요.</p>
 
       <div class="search-bar-mobile">
@@ -504,78 +483,6 @@ if (searchInput) {
     }
   });
 }
-
-// ---------- 홈페이지 연봉 실수령액 미리보기 위젯 ----------
-function calcWidget() {
-  const salaryEl = document.getElementById('w-salary');
-  if (!salaryEl) return;
-
-  const annual = parseNumber(salaryEl.value) || 0;
-  if (!annual) return;
-
-  const taxfreeMonthly = 200000;
-  const dependents = 1;
-  const children = 0;
-
-  const monthlyGross = annual / 12;
-  const insuranceBase = Math.max(monthlyGross - taxfreeMonthly, 0);
-
-  const npBase = Math.min(Math.max(insuranceBase, 410000), 6590000);
-  const np = Math.floor(npBase * 0.0475 / 10) * 10;
-  const hi = Math.floor(insuranceBase * 0.03595 / 10) * 10;
-  const ltc = Math.floor(hi * 0.1314 / 10) * 10;
-  const ei = Math.floor(insuranceBase * 0.009 / 10) * 10;
-
-  const annualTaxfree = taxfreeMonthly * 12;
-  const annualSalaryForTax = Math.max(annual - annualTaxfree, 0);
-
-  function earnedIncomeDeduction(s) {
-    if (s <= 5000000) return s * 0.7;
-    if (s <= 15000000) return 3500000 + (s - 5000000) * 0.4;
-    if (s <= 45000000) return 7500000 + (s - 15000000) * 0.15;
-    if (s <= 100000000) return 12000000 + (s - 45000000) * 0.05;
-    return 14750000 + (s - 100000000) * 0.02;
-  }
-  const earnedIncome = Math.max(annualSalaryForTax - earnedIncomeDeduction(annualSalaryForTax), 0);
-  const personalDeduction = dependents * 1500000;
-  const insuranceAnnualDeduction = (np + hi + ltc + ei) * 12;
-  const taxBase = Math.max(earnedIncome - personalDeduction - insuranceAnnualDeduction, 0);
-
-  function progressiveTax(b) {
-    if (b <= 14000000) return b * 0.06;
-    if (b <= 50000000) return 840000 + (b - 14000000) * 0.15;
-    if (b <= 88000000) return 6240000 + (b - 50000000) * 0.24;
-    if (b <= 150000000) return 15360000 + (b - 88000000) * 0.35;
-    if (b <= 300000000) return 37060000 + (b - 150000000) * 0.38;
-    if (b <= 500000000) return 94060000 + (b - 300000000) * 0.40;
-    if (b <= 1000000000) return 174060000 + (b - 500000000) * 0.42;
-    return 384060000 + (b - 1000000000) * 0.45;
-  }
-  const calculatedTax = progressiveTax(taxBase);
-
-  let earnedTaxCredit;
-  if (calculatedTax <= 1300000) earnedTaxCredit = calculatedTax * 0.55;
-  else earnedTaxCredit = 715000 + (calculatedTax - 1300000) * 0.30;
-  const creditCap = annualSalaryForTax > 70000000 ? 660000 : (annualSalaryForTax > 33000000 ? 740000 - Math.floor((annualSalaryForTax - 33000000) / 1000000) * 8000 : 740000);
-  earnedTaxCredit = Math.min(earnedTaxCredit, Math.max(creditCap, 500000));
-
-  const annualTax = Math.max(Math.round((calculatedTax - earnedTaxCredit) / 10) * 10, 0);
-  const monthlyTax = Math.floor(annualTax / 12 / 10) * 10;
-  const localTax = Math.floor(monthlyTax * 0.1 / 10) * 10;
-
-  const totalDeduction = np + hi + ltc + ei + monthlyTax + localTax;
-  const netMonthly = monthlyGross - totalDeduction;
-
-  document.getElementById('w-result').innerHTML = formatNumber(netMonthly) + '<span style="font-size:14px;color:var(--ink-soft);">원</span>';
-  document.getElementById('w-badge').textContent = '공제 ' + formatNumber(totalDeduction) + '원';
-}
-
-['w-salary'].forEach(id => {
-  const el = document.getElementById(id);
-  if (el) el.addEventListener('input', calcWidget);
-});
-document.querySelectorAll('#w-salary').forEach(attachCommaInput);
-calcWidget();
 
 // ---------- 카테고리 타일 그리드 + 펼침 패널 ----------
 const categoryData = [
