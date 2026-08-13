@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>분할 매수 계산기 (주식·코인) — 계산박스</title>
+<meta name="description" content="총 투자금액과 분할 횟수를 입력해 회차별 매수금액을 계산하는 분할 매수(적립식 투자) 계산기입니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+  <meta name="naver-site-verification" content="eafaf6bf07d38d5e996db34eebdcbca21d9ae51a" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="logo-mark"><svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="8" fill="#1F6F54"/><rect x="7" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="17" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="7" y="17" width="16" height="6" rx="1.5" fill="white"/></svg></span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">29 · 저축·투자</div>
+    <h1>분할 매수 계산기</h1>
+    <p>총 투자금액을 몇 회에 나눠 매수할지 정하면, 회차별 매수금액을 균등하게 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="totalBudget">총 투자금액</label>
+      <div class="input-unit"><input type="text" id="totalBudget" data-comma inputmode="numeric" placeholder="예: 10,000,000"><span class="unit">원</span></div>
+    </div>
+    <div class="field">
+      <label for="splitCount">분할 횟수</label>
+      <div class="input-unit"><input type="text" id="splitCount" inputmode="numeric" placeholder="예: 5"><span class="unit">회</span></div>
+    </div>
+    <button class="btn" onclick="calcSplitBuying()">회차별 매수금액 계산하기</button>
+  </div>
+
+  <div class="stub" id="result">
+    <div class="stub-label">1회당 매수금액</div>
+    <div class="stub-amount" id="r-final">-</div>
+    <div class="stub-sub" id="r-sub"></div>
+    <div class="stub-table" id="r-table"></div>
+    <button class="btn-share" onclick="shareResult('분할 매수 계산기', 'result')">📤 결과 공유하기 (카카오톡·문자 등)</button>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="explain">
+    <h2>분할 매수(적립식 투자)란</h2>
+    <p>한 번에 목돈을 투자하는 대신, 정해진 금액을 여러 번에 나눠 매수하는 전략입니다. 매수 시점을 분산시켜 평균 매수 단가를 시장 평균에 가깝게 만들고, 한 번의 잘못된 타이밍으로 인한 리스크를 줄이는 데 도움이 됩니다.</p>
+    <div class="disclaimer">이 계산기는 균등 분할 기준의 단순 계산 도구이며, 투자 조언이 아닙니다. 실제 매수 시점과 금액은 본인의 투자 판단에 따라 결정하세요.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="averaging-down.html">물타기 계산기</a>
+      <a href="stock-return.html">수익률 계산기</a>
+      <a href="compound.html">복리 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function calcSplitBuying() {
+  const budget = parseNumber(document.getElementById('totalBudget').value);
+  const count = parseNumber(document.getElementById('splitCount').value);
+
+  if (!budget || !count) { alert('총 투자금액과 분할 횟수를 입력해 주세요.'); return; }
+
+  const perRound = Math.floor(budget / count);
+  const remainder = budget - perRound * count;
+
+  document.getElementById('r-final').innerHTML = formatNumber(perRound) + '<span class="won">원</span>';
+  document.getElementById('r-sub').textContent = formatNumber(budget) + '원을 ' + count + '회로 분할';
+
+  let tableHtml = '';
+  for (let i = 1; i <= count; i++) {
+    const amount = i === count ? perRound + remainder : perRound;
+    tableHtml += '<div class="line"><span class="k">' + i + '회차</span><span class="v">' + formatNumber(amount) + '원</span></div>';
+  }
+  document.getElementById('r-table').innerHTML = tableHtml;
+
+  document.getElementById('result').classList.add('show');
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+</script>
+
+</body>
+</html>

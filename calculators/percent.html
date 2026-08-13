@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>퍼센트 계산기 (비율·증감률) — 계산박스</title>
+<meta name="description" content="A의 B%는 얼마인지, A는 B의 몇 %인지, 값이 변하면 몇 % 증가·감소인지 입력하는 즉시 계산하는 퍼센트 계산기입니다.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+  <meta name="naver-site-verification" content="eafaf6bf07d38d5e996db34eebdcbca21d9ae51a" />
+<style>
+.pc-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.pc-input-box {
+  display: flex;
+  align-items: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 14px;
+  gap: 8px;
+}
+.pc-input-box .pc-label { font-size: 13px; color: var(--ink-soft); flex-shrink: 0; white-space: nowrap; }
+.pc-input-box input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 16px;
+  color: var(--ink);
+  text-align: right;
+  outline: none;
+}
+.pc-input-box .pc-suffix { font-size: 13px; color: var(--ink-soft); flex-shrink: 0; }
+.pc-result-card {
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.pc-line {
+  font-size: 15.5px;
+  color: var(--ink);
+  padding: 10px 0;
+}
+.pc-line + .pc-line { border-top: 1px dashed var(--line); }
+.pc-line .pc-num { font-weight: 800; color: var(--stamp); font-family: var(--font-mono); }
+.pc-line .pc-num2 { font-weight: 800; color: #2C5985; font-family: var(--font-mono); }
+.pc-line .pc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 14px;
+  color: #fff;
+  background: var(--gold);
+  border-radius: 14px;
+  padding: 3px 10px;
+  margin: 0 2px;
+}
+.pc-line .pc-badge.down { background: #2C5985; }
+.pc-line .pc-sub { color: var(--ink-soft); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="logo-mark"><svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="8" fill="#1F6F54"/><rect x="7" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="17" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="7" y="17" width="16" height="6" rx="1.5" fill="white"/></svg></span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">30 · 수학</div>
+    <h1>퍼센트 계산기</h1>
+    <p>일상 속 할인가부터 증감률까지, 입력하는 즉시 계산됩니다. 버튼을 누를 필요 없어요.</p>
+  </div>
+
+  <!-- 도구 1: 전체값의 퍼센트는? -->
+  <div class="calc-card">
+    <div class="pc-inputs">
+      <div class="pc-input-box">
+        <span class="pc-label">전체값</span>
+        <input type="text" id="t1-total" data-comma inputmode="numeric" value="20,000">
+        <span class="pc-suffix">의</span>
+      </div>
+      <div class="pc-input-box">
+        <span class="pc-label">퍼센트</span>
+        <input type="text" id="t1-percent" inputmode="decimal" value="30">
+        <span class="pc-suffix">%는?</span>
+      </div>
+    </div>
+    <div class="pc-result-card">
+      <div class="pc-line">전체값 <span class="pc-num" id="t1-total-echo">20,000</span>의 <span class="pc-badge" id="t1-percent-echo">30%</span>는? <span class="pc-num2" id="t1-result">6,000</span></div>
+      <div class="pc-line pc-sub">전체값에서 결과값을 더하면? <span class="pc-num2" id="t1-plus"></span></div>
+      <div class="pc-line pc-sub">전체값에서 결과값을 빼면? <span class="pc-num2" id="t1-minus"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <!-- 도구 2: 일부값은 전체값의 몇%? -->
+  <div class="calc-header" style="padding-top:8px;">
+    <div class="kicker">퍼센트 도구</div>
+    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">일부값은 전체값의 몇 %인가요?</h2>
+  </div>
+
+  <div class="calc-card">
+    <div class="pc-inputs">
+      <div class="pc-input-box">
+        <span class="pc-label">전체값</span>
+        <input type="text" id="t2-total" data-comma inputmode="numeric" value="20,000">
+        <span class="pc-suffix">의</span>
+      </div>
+      <div class="pc-input-box">
+        <span class="pc-label">일부값</span>
+        <input type="text" id="t2-part" data-comma inputmode="numeric" value="30">
+        <span class="pc-suffix">은 몇%?</span>
+      </div>
+    </div>
+    <div class="pc-result-card">
+      <div class="pc-line">전체값 <span class="pc-num" id="t2-total-echo">20,000</span>의 일부값 <span class="pc-num" id="t2-part-echo">30</span>은? <span class="pc-badge" id="t2-result">0.15%</span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 336×280</div>
+
+  <!-- 도구 3: 값이 변하면 몇% -->
+  <div class="calc-header" style="padding-top:8px;">
+    <div class="kicker">퍼센트 도구</div>
+    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">값이 변하면 몇 % 증가·감소인가요?</h2>
+  </div>
+
+  <div class="calc-card">
+    <div class="pc-inputs">
+      <div class="pc-input-box">
+        <span class="pc-label">전체값</span>
+        <input type="text" id="t3-before" data-comma inputmode="numeric" value="20,000">
+        <span class="pc-suffix">이</span>
+      </div>
+      <div class="pc-input-box">
+        <span class="pc-label"></span>
+        <input type="text" id="t3-after" data-comma inputmode="numeric" value="30">
+        <span class="pc-suffix">로 변하면?</span>
+      </div>
+    </div>
+    <div class="pc-result-card">
+      <div class="pc-line">전체값 <span class="pc-num" id="t3-before-echo">20,000</span>이 <span class="pc-num2" id="t3-after-echo">30</span>으로 변하면? <span class="pc-badge" id="t3-result">99.851% ↓</span></div>
+      <div class="pc-line pc-sub">두 값의 차이는? <span class="pc-num2" id="t3-diff">19,970</span></div>
+    </div>
+  </div>
+
+  <div class="explain">
+    <h2>퍼센트 계산, 헷갈리지 않는 법</h2>
+    <p>"전체값의 B%"는 곱셈(전체값 × B ÷ 100), "일부값은 전체값의 몇 %"는 나눗셈(일부값 ÷ 전체값 × 100)입니다. 값이 변할 때의 증감률은 항상 '원래 값(변하기 전 값)' 기준으로 나눈다는 점을 기억하면 헷갈리지 않습니다.</p>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="stock-return.html">수익률 계산기</a>
+      <a href="scientific.html">공학 계산기</a>
+      <a href="unit-convert.html">단위 변환기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+function fmt(n) {
+  if (isNaN(n)) return '-';
+  return Math.round(n * 100) / 100 === Math.round(n) ? formatNumber(n) : (Math.round(n * 100) / 100).toLocaleString('ko-KR');
+}
+
+// ---------- 도구1 ----------
+function updateT1() {
+  const total = parseNumber(document.getElementById('t1-total').value);
+  const percent = parseFloat(document.getElementById('t1-percent').value);
+  if (isNaN(total) || isNaN(percent)) return;
+
+  const result = total * (percent / 100);
+
+  document.getElementById('t1-total-echo').textContent = formatNumber(total);
+  document.getElementById('t1-percent-echo').textContent = percent + '%';
+  document.getElementById('t1-result').textContent = fmt(result);
+  document.getElementById('t1-plus').textContent = fmt(total + result);
+  document.getElementById('t1-minus').textContent = fmt(total - result);
+}
+['t1-total', 't1-percent'].forEach(id => document.getElementById(id).addEventListener('input', updateT1));
+
+// ---------- 도구2 ----------
+function updateT2() {
+  const total = parseNumber(document.getElementById('t2-total').value);
+  const part = parseNumber(document.getElementById('t2-part').value);
+  if (!total) return;
+
+  const result = (part / total) * 100;
+
+  document.getElementById('t2-total-echo').textContent = formatNumber(total);
+  document.getElementById('t2-part-echo').textContent = formatNumber(part);
+  document.getElementById('t2-result').textContent = fmt(result) + '%';
+}
+['t2-total', 't2-part'].forEach(id => document.getElementById(id).addEventListener('input', updateT2));
+
+// ---------- 도구3 ----------
+function updateT3() {
+  const before = parseNumber(document.getElementById('t3-before').value);
+  const after = parseNumber(document.getElementById('t3-after').value);
+  if (!before) return;
+
+  const diff = after - before;
+  const rate = Math.abs(diff / before) * 100;
+  const isDown = diff < 0;
+
+  document.getElementById('t3-before-echo').textContent = formatNumber(before);
+  document.getElementById('t3-after-echo').textContent = formatNumber(after);
+  const badge = document.getElementById('t3-result');
+  badge.textContent = fmt(rate) + '% ' + (isDown ? '↓' : '↑');
+  badge.classList.toggle('down', isDown);
+  document.getElementById('t3-diff').textContent = formatNumber(Math.abs(diff));
+}
+['t3-before', 't3-after'].forEach(id => document.getElementById(id).addEventListener('input', updateT3));
+
+// 초기 실행
+updateT1();
+updateT2();
+updateT3();
+document.querySelectorAll('input[data-comma]').forEach(attachCommaInput);
+</script>
+
+</body>
+</html>

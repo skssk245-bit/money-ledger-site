@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>글자수 세기 계산기 (공백 포함·제외) — 계산박스</title>
+<meta name="description" content="글을 붙여넣으면 공백 포함·제외 글자수, 단어수, 바이트수를 실시간으로 계산합니다. SNS·플랫폼별 글자수 제한도 함께 확인하세요.">
+<link rel="stylesheet" href="../css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2524938187073684" crossorigin="anonymous"></script>
+  <meta name="naver-site-verification" content="eafaf6bf07d38d5e996db34eebdcbca21d9ae51a" />
+<style>
+.char-textarea {
+  width: 100%;
+  min-height: 220px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  resize: vertical;
+}
+.char-textarea:focus { outline: 2px solid var(--green); outline-offset: -1px; background: #fff; }
+.char-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+}
+.char-stat-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.char-stat-box .cs-label { font-size: 12px; color: var(--ink-soft); margin-bottom: 4px; }
+.char-stat-box .cs-value { font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--ink); }
+.limit-table { margin-top: 10px; }
+.limit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+}
+.limit-row:last-child { border-bottom: none; }
+.limit-row .lr-name { font-weight: 600; color: var(--ink); }
+.limit-row .lr-limit { font-family: var(--font-mono); color: var(--ink-soft); }
+.limit-row .lr-status { font-family: var(--font-mono); font-weight: 700; font-size: 12.5px; padding: 3px 9px; border-radius: 12px; }
+.limit-row .lr-ok { color: var(--green); background: rgba(31,111,84,0.1); }
+.limit-row .lr-over { color: var(--stamp); background: rgba(178,58,46,0.1); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../index.html" class="brand"><span class="logo-mark"><svg width="28" height="28" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="30" height="30" rx="8" fill="#1F6F54"/><rect x="7" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="17" y="7" width="6" height="6" rx="1.5" fill="white"/><rect x="7" y="17" width="16" height="6" rx="1.5" fill="white"/></svg></span>계산박스</a>
+    <nav class="site-nav">
+      <a href="../index.html">전체 계산기</a>
+      <a href="../about.html">소개</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="calc-header">
+    <div class="kicker">26 · 단위 변환</div>
+    <h1>글자수 세기 계산기</h1>
+    <p>글을 붙여넣으면 공백 포함·제외 글자수, 단어수, 바이트수를 실시간으로 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field">
+      <label for="char-input">텍스트 입력</label>
+      <textarea class="char-textarea" id="char-input" placeholder="여기에 글을 붙여넣거나 입력하세요..."></textarea>
+    </div>
+
+    <div class="char-stats">
+      <div class="char-stat-box">
+        <div class="cs-label">공백 포함 글자수</div>
+        <div class="cs-value" id="cs-with-space">0자</div>
+      </div>
+      <div class="char-stat-box">
+        <div class="cs-label">공백 제외 글자수</div>
+        <div class="cs-value" id="cs-without-space">0자</div>
+      </div>
+      <div class="char-stat-box">
+        <div class="cs-label">단어수</div>
+        <div class="cs-value" id="cs-words">0개</div>
+      </div>
+      <div class="char-stat-box">
+        <div class="cs-label">바이트 (UTF-8)</div>
+        <div class="cs-value" id="cs-bytes">0B</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-slot">AD SLOT · 728×90</div>
+
+  <div class="calc-header" style="padding-top:8px;">
+    <div class="kicker">참고 자료</div>
+    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">플랫폼별 글자수 제한</h2>
+    <p style="color:var(--ink-soft); font-size:14.5px; margin:0;">입력한 텍스트가 각 플랫폼의 글자수 제한을 넘는지 실시간으로 확인하세요.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="limit-table" id="limit-table"></div>
+  </div>
+
+  <div class="explain">
+    <h2>공백 포함·제외, 왜 둘 다 필요한가요</h2>
+    <p>자기소개서, 논문, 원고지 매수 등 공식 서식에서는 대부분 '공백 포함' 글자수를 기준으로 삼습니다. 반면 일부 SNS나 플랫폼은 공백을 세지 않는 경우도 있어, 제출하는 곳의 기준을 먼저 확인하는 것이 좋습니다.</p>
+    <h3>바이트(Byte)는 언제 필요한가요</h3>
+    <p>문자 메시지(SMS), 일부 게시판 제목처럼 '바이트' 단위로 길이를 제한하는 곳이 있습니다. 한글 한 글자는 보통 3바이트, 영문·숫자·공백은 1바이트로 계산됩니다(UTF-8 기준).</p>
+    <div class="disclaimer">플랫폼별 글자수 제한은 정책 변경에 따라 달라질 수 있습니다. 중요한 게시물은 실제 등록 전 해당 플랫폼에서 다시 확인하는 것을 권장합니다.</div>
+  </div>
+
+  <div class="related">
+    <div class="related-title">함께 보면 좋은 계산기</div>
+    <div class="related-grid">
+      <a href="sns-image-size.html">SNS 이미지 규격 계산기</a>
+      <a href="unit-convert.html">단위 변환기</a>
+      <a href="resolution.html">해상도 계산기</a>
+    </div>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div>
+      <a href="../about.html">사이트 소개</a>
+      <a href="../privacy.html">개인정보처리방침</a>
+      <a href="../terms.html">이용약관</a>
+    </div>
+    <div>© 2026 계산박스. 모든 계산 결과는 참고용이며 법적 효력이 없습니다.</div>
+  </div>
+</footer>
+
+<script src="../js/common.js"></script>
+<script>
+const platformLimits = [
+  { name: '트위터(X) 게시물', limit: 280 },
+  { name: '인스타그램 캡션', limit: 2200 },
+  { name: '유튜브 제목', limit: 100 },
+  { name: '유튜브 설명란', limit: 5000 },
+  { name: '네이버 블로그 제목', limit: 100 },
+  { name: '자기소개서 항목(예시)', limit: 1000 },
+];
+
+function renderLimitTable(count) {
+  const el = document.getElementById('limit-table');
+  el.innerHTML = platformLimits.map(p => {
+    const over = count > p.limit;
+    return '<div class="limit-row">' +
+      '<span class="lr-name">' + p.name + '</span>' +
+      '<span class="lr-limit">' + formatNumber(p.limit) + '자 제한</span>' +
+      '<span class="lr-status ' + (over ? 'lr-over' : 'lr-ok') + '">' + (over ? '초과 +' + formatNumber(count - p.limit) : '여유 ' + formatNumber(p.limit - count)) + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+function updateCharCount() {
+  const text = document.getElementById('char-input').value;
+
+  const withSpace = text.length;
+  const withoutSpace = text.replace(/\s/g, '').length;
+  const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  const bytes = new TextEncoder().encode(text).length;
+
+  document.getElementById('cs-with-space').textContent = formatNumber(withSpace) + '자';
+  document.getElementById('cs-without-space').textContent = formatNumber(withoutSpace) + '자';
+  document.getElementById('cs-words').textContent = formatNumber(words) + '개';
+  document.getElementById('cs-bytes').textContent = formatNumber(bytes) + 'B';
+
+  renderLimitTable(withSpace);
+}
+
+document.getElementById('char-input').addEventListener('input', updateCharCount);
+updateCharCount();
+</script>
+
+</body>
+</html>

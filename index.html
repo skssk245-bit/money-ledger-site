@@ -178,7 +178,7 @@
         <span class="cat-accent"></span>
         <span class="cat-info">
           <span class="cat-title">저축·투자</span>
-          <span class="cat-desc">예적금 만기, 복리 시뮬레이션</span>
+          <span class="cat-desc">예적금, 복리, 물타기·수익률·분할매수</span>
         </span>
         <span class="cat-chevron">▾</span>
       </summary>
@@ -194,6 +194,27 @@
           <span class="num">07</span>
           <span class="title">복리 계산기
             <span class="desc">투자 원금과 매월 적립액의 장기 성장 시뮬레이션</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+        <a class="ledger-row" href="calculators/averaging-down.html">
+          <span class="num">27</span>
+          <span class="title">물타기 계산기
+            <span class="desc">추가 매수 시 새로운 평균 단가 계산</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+        <a class="ledger-row" href="calculators/stock-return.html">
+          <span class="num">28</span>
+          <span class="title">수익률 계산기
+            <span class="desc">주식·코인 매수매도 수익률과 손익금액</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+        <a class="ledger-row" href="calculators/split-buying.html">
+          <span class="num">29</span>
+          <span class="title">분할 매수 계산기
+            <span class="desc">총 투자금액을 회차별로 균등 분할</span>
           </span>
           <span class="arrow">→</span>
         </a>
@@ -299,6 +320,13 @@
           </span>
           <span class="arrow">→</span>
         </a>
+        <a class="ledger-row" href="calculators/char-count.html">
+          <span class="num">26</span>
+          <span class="title">글자수 세기 계산기
+            <span class="desc">공백 포함·제외 글자수, 단어수, 바이트수</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
       </div>
     </details>
 
@@ -327,22 +355,22 @@
         <span class="cat-accent"></span>
         <span class="cat-info">
           <span class="cat-title">수학</span>
-          <span class="cat-desc">확률, 공학 계산기</span>
+          <span class="cat-desc">공학, 퍼센트 계산기</span>
         </span>
         <span class="cat-chevron">▾</span>
       </summary>
       <div class="cat-items">
-        <a class="ledger-row" href="calculators/probability.html">
-          <span class="num">24</span>
-          <span class="title">확률 계산기
-            <span class="desc">로또 당첨 확률, 순열·조합, 이항확률</span>
-          </span>
-          <span class="arrow">→</span>
-        </a>
         <a class="ledger-row" href="calculators/scientific.html">
           <span class="num">25</span>
           <span class="title">공학 계산기
             <span class="desc">삼각함수·로그·제곱근 등 버튼식 계산기</span>
+          </span>
+          <span class="arrow">→</span>
+        </a>
+        <a class="ledger-row" href="calculators/percent.html">
+          <span class="num">30</span>
+          <span class="title">퍼센트 계산기
+            <span class="desc">A의 B%, 비율, 증감률 계산</span>
           </span>
           <span class="arrow">→</span>
         </a>
@@ -429,6 +457,9 @@ const calcList = [
   { name: '양도소득세 계산기', url: 'calculators/capital-gains-tax.html' },
   { name: '예적금 만기 계산기', url: 'calculators/savings.html' },
   { name: '복리 계산기', url: 'calculators/compound.html' },
+  { name: '물타기 계산기', url: 'calculators/averaging-down.html' },
+  { name: '수익률 계산기', url: 'calculators/stock-return.html' },
+  { name: '분할 매수 계산기', url: 'calculators/split-buying.html' },
   { name: '전세/월세 전환 계산기', url: 'calculators/jeonse.html' },
   { name: '주택 취득세 계산기', url: 'calculators/acquisition-tax.html' },
   { name: '중개보수 계산기', url: 'calculators/brokerage-fee.html' },
@@ -438,9 +469,10 @@ const calcList = [
   { name: '단위 변환기', url: 'calculators/unit-convert.html' },
   { name: '해상도 계산기', url: 'calculators/resolution.html' },
   { name: 'PPI 계산기', url: 'calculators/ppi.html' },
+  { name: '글자수 세기 계산기', url: 'calculators/char-count.html' },
   { name: 'SNS 이미지 규격 계산기', url: 'calculators/sns-image-size.html' },
-  { name: '확률 계산기', url: 'calculators/probability.html' },
   { name: '공학 계산기', url: 'calculators/scientific.html' },
+  { name: '퍼센트 계산기', url: 'calculators/percent.html' },
   { name: 'BMI 계산기', url: 'calculators/bmi.html' },
   { name: '칼로리 계산기', url: 'calculators/calorie.html' },
   { name: '출산예정일 계산기', url: 'calculators/pregnancy.html' },
@@ -525,6 +557,9 @@ const categoryData = [
     items: [
       { num: '06', name: '예적금 만기 계산기', desc: '단리·복리, 세금우대 여부에 따른 만기 수령액', url: 'calculators/savings.html' },
       { num: '07', name: '복리 계산기', desc: '투자 원금과 매월 적립액의 장기 성장 시뮬레이션', url: 'calculators/compound.html' },
+      { num: '27', name: '물타기 계산기', desc: '추가 매수 시 새로운 평균 단가 계산', url: 'calculators/averaging-down.html' },
+      { num: '28', name: '수익률 계산기', desc: '주식·코인 매수매도 수익률과 손익금액', url: 'calculators/stock-return.html' },
+      { num: '29', name: '분할 매수 계산기', desc: '총 투자금액을 회차별로 균등 분할', url: 'calculators/split-buying.html' },
     ],
   },
   {
@@ -552,6 +587,7 @@ const categoryData = [
       { num: '13', name: '단위 변환기', desc: '길이·무게·온도·부피 단위를 한 번에 변환', url: 'calculators/unit-convert.html' },
       { num: '21', name: '해상도 계산기', desc: '비율 계산, 프리셋 해상도, 비율 역계산', url: 'calculators/resolution.html' },
       { num: '22', name: 'PPI 계산기', desc: '해상도·화면 크기 기반 화소밀도 계산', url: 'calculators/ppi.html' },
+      { num: '26', name: '글자수 세기 계산기', desc: '공백 포함·제외 글자수, 단어수, 바이트수', url: 'calculators/char-count.html' },
     ],
   },
   {
@@ -574,8 +610,8 @@ const categoryData = [
     id: 'math', name: '수학', color: '#B8862E',
     icon: '<circle cx="5" cy="5" r="1.3" fill="white"/><circle cx="11" cy="5" r="1.3" fill="white"/><circle cx="8" cy="10.5" r="1.3" fill="white"/><path d="M5 5l3 5.5M11 5l-3 5.5" stroke="white" stroke-width="1.1"/>',
     items: [
-      { num: '24', name: '확률 계산기', desc: '로또 당첨 확률, 순열·조합, 이항확률', url: 'calculators/probability.html' },
       { num: '25', name: '공학 계산기', desc: '삼각함수·로그·제곱근 등 버튼식 계산기', url: 'calculators/scientific.html' },
+      { num: '30', name: '퍼센트 계산기', desc: 'A의 B%, 비율, 증감률 계산', url: 'calculators/percent.html' },
     ],
   },
 ];
