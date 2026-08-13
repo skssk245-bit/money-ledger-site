@@ -67,6 +67,49 @@
 
   <div class="ad-slot">AD SLOT · 728×90</div>
 
+  <!-- 도구 2: 목표 평단가 도달 계산 -->
+  <div class="calc-header" style="padding-top:8px;">
+    <div class="kicker">물타기 도구</div>
+    <h2 style="font-family:var(--font-display); font-weight:900; font-size:22px; margin:0 0 8px;">목표 평단가, 몇 주 더 사야 할까?</h2>
+    <p style="color:var(--ink-soft); font-size:14.5px; margin:0;">원하는 목표 평단가를 입력하면, 그 가격에 도달하기 위해 추가로 매수해야 할 수량을 계산합니다.</p>
+  </div>
+
+  <div class="calc-card">
+    <div class="field-row">
+      <div class="field">
+        <label for="g-qty1">기존 보유 수량</label>
+        <div class="input-unit"><input type="text" id="g-qty1" data-comma inputmode="numeric" placeholder="예: 10"></div>
+      </div>
+      <div class="field">
+        <label for="g-price1">기존 평균 단가</label>
+        <div class="input-unit"><input type="text" id="g-price1" data-comma inputmode="numeric" placeholder="예: 10,000"><span class="unit">원</span></div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label for="g-target">목표 평단가</label>
+        <div class="input-unit"><input type="text" id="g-target" data-comma inputmode="numeric" placeholder="예: 8,500"><span class="unit">원</span></div>
+      </div>
+      <div class="field">
+        <label for="g-price2">추가 매수 예정 단가</label>
+        <div class="input-unit"><input type="text" id="g-price2" data-comma inputmode="numeric" placeholder="예: 7,000"><span class="unit">원</span></div>
+      </div>
+    </div>
+    <button class="btn" onclick="calcTargetAvg()">필요 매수 수량 계산하기</button>
+  </div>
+
+  <div class="stub" id="result2">
+    <div class="stub-label">목표 평단가 도달에 필요한 추가 매수 수량</div>
+    <div class="stub-amount" id="r2-final">-</div>
+    <div class="stub-sub" id="r2-sub"></div>
+    <div class="stub-table">
+      <div class="line"><span class="k">추가 매수 필요 금액</span><span class="v" id="r2-cost"></span></div>
+      <div class="line"><span class="k">도달 후 총 보유 수량</span><span class="v" id="r2-qty"></span></div>
+      <div class="line"><span class="k">도달 후 총 투자금액</span><span class="v" id="r2-total"></span></div>
+    </div>
+    <button class="btn-share" onclick="shareResult('물타기 계산기', 'result2')">📤 결과 공유하기 (카카오톡·문자 등)</button>
+  </div>
+
   <div class="explain">
     <h2>물타기, 계산은 어떻게 하나요</h2>
     <p>새로운 평균 단가는 「(기존 수량×기존 단가 + 추가 수량×추가 단가) ÷ 총 수량」으로 계산합니다. 하락한 가격에 추가 매수하면 평균 단가가 낮아져 손실 회복에 필요한 반등폭이 줄어들지만, 그만큼 투자 원금과 리스크도 함께 늘어난다는 점을 유의해야 합니다.</p>
@@ -120,6 +163,45 @@ function calcAveraging() {
   document.getElementById('r-change').textContent = (changeRate >= 0 ? '−' : '+') + Math.abs(changeRate).toFixed(2) + '%';
   document.getElementById('result').classList.add('show');
   document.getElementById('result').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// ---------- 도구2: 목표 평단가 도달에 필요한 매수 수량 ----------
+function calcTargetAvg() {
+  const qty1 = parseNumber(document.getElementById('g-qty1').value);
+  const price1 = parseNumber(document.getElementById('g-price1').value);
+  const target = parseNumber(document.getElementById('g-target').value);
+  const price2 = parseNumber(document.getElementById('g-price2').value);
+
+  if (!qty1 || !price1 || !target || !price2) {
+    alert('모든 값을 입력해 주세요.');
+    return;
+  }
+
+  if (price2 === target) {
+    alert('추가 매수 단가와 목표 평단가가 같아서 계산할 수 없어요. 값을 다르게 입력해 주세요.');
+    return;
+  }
+
+  const neededQty = (qty1 * (target - price1)) / (price2 - target);
+
+  if (neededQty <= 0 || !isFinite(neededQty)) {
+    alert('입력하신 조건으로는 그 목표 평단가에 도달할 수 없어요.\n목표 평단가는 기존 평균 단가와 추가 매수 단가 "사이" 값이어야 해요.');
+    return;
+  }
+
+  const roundedQty = Math.ceil(neededQty);
+  const additionalCost = roundedQty * price2;
+  const finalQty = qty1 + roundedQty;
+  const finalTotal = qty1 * price1 + additionalCost;
+  const actualAvg = finalTotal / finalQty;
+
+  document.getElementById('r2-final').innerHTML = formatNumber(roundedQty) + '<span class="won">주(개)</span>';
+  document.getElementById('r2-sub').textContent = '실제 도달 평단가 약 ' + formatNumber(actualAvg) + '원 (목표 ' + formatNumber(target) + '원)';
+  document.getElementById('r2-cost').textContent = formatNumber(additionalCost) + '원';
+  document.getElementById('r2-qty').textContent = formatNumber(finalQty) + '주(개)';
+  document.getElementById('r2-total').textContent = formatNumber(finalTotal) + '원';
+  document.getElementById('result2').classList.add('show');
+  document.getElementById('result2').scrollIntoView({behavior:'smooth', block:'center'});
 }
 </script>
 
