@@ -116,8 +116,8 @@
       <summary>
         <span class="cat-accent"></span>
         <span class="cat-info">
-          <span class="cat-title">대출</span>
-          <span class="cat-desc">원리금·원금균등 상환, DTI·DSR</span>
+          <span class="cat-title">대출·세금</span>
+          <span class="cat-desc">대출 상환, DTI·DSR, 부가세, 취득세, 양도소득세</span>
         </span>
         <span class="cat-chevron">▾</span>
       </summary>
@@ -136,19 +136,6 @@
           </span>
           <span class="arrow">→</span>
         </a>
-      </div>
-    </details>
-
-    <details class="category cat-red">
-      <summary>
-        <span class="cat-accent"></span>
-        <span class="cat-info">
-          <span class="cat-title">세금</span>
-          <span class="cat-desc">부가세, 자동차 취득세, 양도소득세</span>
-        </span>
-        <span class="cat-chevron">▾</span>
-      </summary>
-      <div class="cat-items">
         <a class="ledger-row" href="calculators/vat.html">
           <span class="num">05</span>
           <span class="title">부가세 계산기
@@ -178,7 +165,7 @@
         <span class="cat-accent"></span>
         <span class="cat-info">
           <span class="cat-title">저축·투자</span>
-          <span class="cat-desc">예적금, 복리, 물타기·수익률·분할매수</span>
+          <span class="cat-desc">예적금, 복리, 물타기·수익률</span>
         </span>
         <span class="cat-chevron">▾</span>
       </summary>
@@ -208,13 +195,6 @@
           <span class="num">28</span>
           <span class="title">수익률 계산기
             <span class="desc">주식·코인 매수매도 수익률과 손익금액</span>
-          </span>
-          <span class="arrow">→</span>
-        </a>
-        <a class="ledger-row" href="calculators/split-buying.html">
-          <span class="num">29</span>
-          <span class="title">분할 매수 계산기
-            <span class="desc">총 투자금액을 회차별로 균등 분할</span>
           </span>
           <span class="arrow">→</span>
         </a>
@@ -293,8 +273,8 @@
       <summary>
         <span class="cat-accent"></span>
         <span class="cat-info">
-          <span class="cat-title">단위 변환</span>
-          <span class="cat-desc">길이·무게·온도·부피, 해상도, PPI</span>
+          <span class="cat-title">디지털 도구</span>
+          <span class="cat-desc">단위변환·해상도·PPI·글자수·SNS규격·퍼센트</span>
         </span>
         <span class="cat-chevron">▾</span>
       </summary>
@@ -327,43 +307,10 @@
           </span>
           <span class="arrow">→</span>
         </a>
-      </div>
-    </details>
-
-    <details class="category cat-gold">
-      <summary>
-        <span class="cat-accent"></span>
-        <span class="cat-info">
-          <span class="cat-title">SNS</span>
-          <span class="cat-desc">플랫폼별 권장 이미지 규격</span>
-        </span>
-        <span class="cat-chevron">▾</span>
-      </summary>
-      <div class="cat-items">
         <a class="ledger-row" href="calculators/sns-image-size.html">
           <span class="num">23</span>
           <span class="title">SNS 이미지 규격 계산기
             <span class="desc">인스타그램·유튜브·페이스북 등 권장 이미지 크기</span>
-          </span>
-          <span class="arrow">→</span>
-        </a>
-      </div>
-    </details>
-
-    <details class="category cat-gold">
-      <summary>
-        <span class="cat-accent"></span>
-        <span class="cat-info">
-          <span class="cat-title">수학</span>
-          <span class="cat-desc">공학, 퍼센트 계산기</span>
-        </span>
-        <span class="cat-chevron">▾</span>
-      </summary>
-      <div class="cat-items">
-        <a class="ledger-row" href="calculators/scientific.html">
-          <span class="num">25</span>
-          <span class="title">공학 계산기
-            <span class="desc">삼각함수·로그·제곱근 등 버튼식 계산기</span>
           </span>
           <span class="arrow">→</span>
         </a>
@@ -459,7 +406,6 @@ const calcList = [
   { name: '복리 계산기', url: 'calculators/compound.html' },
   { name: '물타기 계산기', url: 'calculators/averaging-down.html' },
   { name: '수익률 계산기', url: 'calculators/stock-return.html' },
-  { name: '분할 매수 계산기', url: 'calculators/split-buying.html' },
   { name: '전세/월세 전환 계산기', url: 'calculators/jeonse.html' },
   { name: '주택 취득세 계산기', url: 'calculators/acquisition-tax.html' },
   { name: '중개보수 계산기', url: 'calculators/brokerage-fee.html' },
@@ -471,7 +417,6 @@ const calcList = [
   { name: 'PPI 계산기', url: 'calculators/ppi.html' },
   { name: '글자수 세기 계산기', url: 'calculators/char-count.html' },
   { name: 'SNS 이미지 규격 계산기', url: 'calculators/sns-image-size.html' },
-  { name: '공학 계산기', url: 'calculators/scientific.html' },
   { name: '퍼센트 계산기', url: 'calculators/percent.html' },
   { name: 'BMI 계산기', url: 'calculators/bmi.html' },
   { name: '칼로리 계산기', url: 'calculators/calorie.html' },
@@ -535,17 +480,11 @@ const categoryData = [
     ],
   },
   {
-    id: 'loan', name: '대출', color: '#B23A2E',
+    id: 'loantax', name: '대출·세금', color: '#B23A2E',
     icon: '<circle cx="8" cy="8" r="6.5" stroke="white" stroke-width="1.3"/><path d="M6 6l4 4M10 6l-4 4" stroke="white" stroke-width="1.3"/>',
     items: [
       { num: '04', name: '대출 상환 계산기', desc: '원리금균등·원금균등 방식별 월 상환액 비교', url: 'calculators/loan.html' },
       { num: '17', name: 'DTI·DSR 계산기', desc: '연소득 대비 대출 상환비율, 대출 한도 사전 확인', url: 'calculators/dsr.html' },
-    ],
-  },
-  {
-    id: 'tax', name: '세금', color: '#B23A2E',
-    icon: '<rect x="2.5" y="1.5" width="11" height="13" rx="1.5" stroke="white" stroke-width="1.3"/><path d="M5 5h6M5 8h6M5 11h3" stroke="white" stroke-width="1.3"/>',
-    items: [
       { num: '05', name: '부가세 계산기', desc: '공급가액과 부가세 포함 총액 상호 환산', url: 'calculators/vat.html' },
       { num: '18', name: '자동차 취득세 계산기', desc: '차종·영업용 여부에 따른 자동차 취득세 추정', url: 'calculators/car-acquisition-tax.html' },
       { num: '19', name: '양도소득세 계산기', desc: '1세대1주택 비과세·장기보유특별공제 반영 추정', url: 'calculators/capital-gains-tax.html' },
@@ -559,7 +498,6 @@ const categoryData = [
       { num: '07', name: '복리 계산기', desc: '투자 원금과 매월 적립액의 장기 성장 시뮬레이션', url: 'calculators/compound.html' },
       { num: '27', name: '물타기 계산기', desc: '추가 매수 시 새로운 평균 단가 계산', url: 'calculators/averaging-down.html' },
       { num: '28', name: '수익률 계산기', desc: '주식·코인 매수매도 수익률과 손익금액', url: 'calculators/stock-return.html' },
-      { num: '29', name: '분할 매수 계산기', desc: '총 투자금액을 회차별로 균등 분할', url: 'calculators/split-buying.html' },
     ],
   },
   {
@@ -581,20 +519,15 @@ const categoryData = [
     ],
   },
   {
-    id: 'unit', name: '단위 변환', color: '#B8862E',
+    id: 'digital', name: '디지털 도구', color: '#B8862E',
     icon: '<path d="M2 11L11 2M2 11l2.5.5M2 11l-.5-2.5M11 2l2.5.5M11 2l.5 2.5" stroke="white" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>',
     items: [
       { num: '13', name: '단위 변환기', desc: '길이·무게·온도·부피 단위를 한 번에 변환', url: 'calculators/unit-convert.html' },
       { num: '21', name: '해상도 계산기', desc: '비율 계산, 프리셋 해상도, 비율 역계산', url: 'calculators/resolution.html' },
       { num: '22', name: 'PPI 계산기', desc: '해상도·화면 크기 기반 화소밀도 계산', url: 'calculators/ppi.html' },
       { num: '26', name: '글자수 세기 계산기', desc: '공백 포함·제외 글자수, 단어수, 바이트수', url: 'calculators/char-count.html' },
-    ],
-  },
-  {
-    id: 'sns', name: 'SNS', color: '#B8862E',
-    icon: '<rect x="2" y="2" width="12" height="12" rx="3" stroke="white" stroke-width="1.3"/><circle cx="8" cy="8" r="2.5" stroke="white" stroke-width="1.3"/><circle cx="11.3" cy="4.7" r="0.6" fill="white"/>',
-    items: [
       { num: '23', name: 'SNS 이미지 규격 계산기', desc: '인스타그램·유튜브·페이스북 등 권장 이미지 크기', url: 'calculators/sns-image-size.html' },
+      { num: '30', name: '퍼센트 계산기', desc: 'A의 B%, 비율, 증감률 계산', url: 'calculators/percent.html' },
     ],
   },
   {
@@ -604,14 +537,6 @@ const categoryData = [
       { num: '14', name: 'BMI 계산기', desc: '체질량지수 산출 및 비만도 구간 확인', url: 'calculators/bmi.html' },
       { num: '15', name: '칼로리 계산기', desc: '기초대사량(BMR)과 일일 권장 칼로리(TDEE) 산출', url: 'calculators/calorie.html' },
       { num: '16', name: '출산예정일 계산기', desc: '마지막 생리 시작일 기준 출산예정일과 임신 주수', url: 'calculators/pregnancy.html' },
-    ],
-  },
-  {
-    id: 'math', name: '수학', color: '#B8862E',
-    icon: '<circle cx="5" cy="5" r="1.3" fill="white"/><circle cx="11" cy="5" r="1.3" fill="white"/><circle cx="8" cy="10.5" r="1.3" fill="white"/><path d="M5 5l3 5.5M11 5l-3 5.5" stroke="white" stroke-width="1.1"/>',
-    items: [
-      { num: '25', name: '공학 계산기', desc: '삼각함수·로그·제곱근 등 버튼식 계산기', url: 'calculators/scientific.html' },
-      { num: '30', name: '퍼센트 계산기', desc: 'A의 B%, 비율, 증감률 계산', url: 'calculators/percent.html' },
     ],
   },
 ];
